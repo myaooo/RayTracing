@@ -1,5 +1,5 @@
 #pragma once
-#include "Vec3d.h"
+#include "Vecnd.h"
 #include <vector>
 
 namespace RayTracing

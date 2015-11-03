@@ -11,10 +11,11 @@
 
 #include "color.h"
 #include "point3d.h"
-#include "Vec3d.h"
+#include "Vecnd.h"
 #include "SimpleObject.h"
 
 namespace RayTracing{
+	typedef MyMath::Vec3d Vec3d;
     // Light
     class Light{
     public:
@@ -43,7 +44,7 @@ namespace RayTracing{
         Vec3d orient;
         // method
         // Constructor
-        ParaLight(Vec3d & orient)
+		ParaLight(Vec3d & orient);
         ParaLight(Vec3d & orient, PointLight& pl);
     };
     

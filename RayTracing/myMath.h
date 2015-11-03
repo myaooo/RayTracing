@@ -6,6 +6,10 @@
 //  Copyright © 2015年 Ming Yao. All rights reserved.
 //
 
-namespace MyMath{
+#ifndef MATH_H
+#define MATH_H
 
-}
+#include "Num.h"
+#include "Vecnd.h"
+
+#endif

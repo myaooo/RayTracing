@@ -9,11 +9,11 @@
 #ifndef point3d_h
 #define point3d_h
 
-#include "Vec3d.h"
+#include "Vecnd.h"
 #include "color.h"
 
 namespace RayTracing{
-    typedef Vec3d Point3d;
+    typedef MyMath::Vec3d Point3d;
     
     class Point_with_color : public Point3d{
     public:

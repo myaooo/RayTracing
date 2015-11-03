@@ -9,11 +9,10 @@
 #ifndef camera_h
 #define camera_h
 
-#include "Vec3d.h"
-#include "opencv2/opencv.hpp"
+#include "Vecnd.h"
 
 namespace  RayTracing {
-    
+	typedef MyMath::Vec3d Vec3d;
     class Viewplane{
     public:
         Vec3d UpRightPoint;
