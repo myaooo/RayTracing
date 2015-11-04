@@ -11,5 +11,6 @@
 
 #include "Num.h"
 #include "Vecnd.h"
+#include "Matrix.h"
 
 #endif

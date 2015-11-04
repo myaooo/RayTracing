@@ -39,6 +39,18 @@ namespace MyMath
             assert(index<_len);
             return _p[index];
         }
+
+		//Operator ()
+		inline double& operator ()(unsigned index)
+		{
+			assert(index < _len);
+			return _p[index];
+		}
+		inline const double& operator ()(unsigned index) const
+		{
+			assert(index < _len);
+			return _p[index];
+		}
         
         //Operator =
         Vecnd<dim>& operator = (const Vecnd<dim>& v);
