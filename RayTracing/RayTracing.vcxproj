@@ -81,11 +81,14 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="geometry.h" />
+    <ClInclude Include="kdtree.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="myMath.h" />
     <ClInclude Include="Num.h" />
-    <ClInclude Include="point3d.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="raytracer.h" />
     <ClInclude Include="scene.h" />
@@ -96,9 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="kdtree.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="raytracer.cpp" />
     <ClCompile Include="RayTracing.cpp" />

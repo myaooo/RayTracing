@@ -11,20 +11,24 @@
 
 #include <list>
 #include "SimpleObject.h"
-
+#include "color.h"
+#include "Material.h"
 
 namespace RayTracing{
+	class Object : public CSimpleObject{
+	public:
+		Material* material;
+	};
     class Scene{
     private:
         // Type definition
-        typedef CSimpleObject Object;
-        typedef std::list<Object> ObjVec;
+        typedef std::list<Object> ObjectList;
         
         // data field
-        ObjVec objvec;
+        ObjectList objects;
     public:
         unsigned long objnum(){
-            return objvec.size();
+            return objects.size();
         }
     };
 }

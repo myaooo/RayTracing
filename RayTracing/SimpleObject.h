@@ -4,6 +4,9 @@
 
 namespace RayTracing
 {
+	typedef MyMath::Vecnd<3> Vec3d;
+	// A definition of array
+	// Later used to store triangle list
     template <typename T, int N> class Array 
     {
     public:
@@ -23,11 +26,13 @@ namespace RayTracing
 
     protected:
         T _p[N];
-    };
+    }; // end of class Array
+	
 
     class CSimpleObject
     {
     public:
+		typedef Array<int, 3> Triangleidx;
         CSimpleObject(void);
         ~CSimpleObject(void);
         
@@ -47,7 +52,7 @@ namespace RayTracing
         int             m_nVertices;
         int             m_nTriangles;
         Vec3d*          m_pVertexList;
-        Array<int,3>*   m_pTriangleList;
+        Triangleidx*	m_pTriangleList;
     };
 
 }
