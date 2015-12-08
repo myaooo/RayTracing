@@ -1,4 +1,4 @@
-﻿////  Geometry.h//  RayTracing////  Created by Ming Yao on 15/10/26.//  Copyright © 2015年 Ming Yao. All rights reserved.//#ifndef GEOMETRY_H#define GEOMETRY_H#include "myMath.h"#include "Num.h"namespace MyMath{	typedef Vecnd<3> Vec3d;	// BBox is a class that define a geometry concept box, or bounding box.	class BBox{	public:
+﻿////  Geometry.h//  RayTracing////  Created by Ming Yao on 15/10/26.//#ifndef GEOMETRY_H#define GEOMETRY_H#include "myMath.h"#include "Num.h"namespace MyMath{	typedef Vecnd<3> Vec3d;	// BBox is a class that define a geometry concept box, or bounding box.	class BBox{	public:
 		// data
 		union
 		{
@@ -75,4 +75,4 @@
 				v(2) = bboxIn.zMin;
 			mat.Transform(v_t, v);
 			bboxOut.Union(v_t);
-		}	};*/	// Beam is a class that define a geometry concept beam	// Beam contains a source and a direction	class Beam{	public:		// data field		Vec3d source;		Vec3d direction;	public:		// Constructor		Beam(){}		Beam(Vec3d & s, Vec3d& dir) : source(s), direction(dir){}		Beam(const Beam & b){			this->source = b.source;			this->direction = b.direction;		}	};}#endif
+		}	};*/	// Beam is a class that define a geometry concept beam	// Beam contains a source and a direction	class Beam{	public:		// data field		Vec3d source;		Vec3d direction;	public:		// Constructor		Beam(){}		Beam(Vec3d & s, Vec3d& dir) : source(s), direction(dir){}		Beam(const Beam & b){			this->source = b.source;			this->direction = b.direction;		}	};}#endif
