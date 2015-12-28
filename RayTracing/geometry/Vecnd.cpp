@@ -10,30 +10,36 @@ namespace MyMath
 //////////////////////////////////////////////////////////////////////////
 //  Constructors and Deconstructors
 	template<unsigned dim>
-	Vecnd<dim>::Vecnd() :_len(dim)
+	Vecnd<dim>::Vecnd()
     {
-        memset(_p,0,sizeof(double)*_len);
+        memset(_p,0,sizeof(double)*dim);
     }
 
 	template<unsigned dim>
-	Vecnd<dim>::Vecnd(double x, ...) : _len(dim){
+	Vecnd<dim>::Vecnd(double x, ...) {
 		va_list arg_ptr;
 		va_start(arg_ptr, x);
-		for (int i = 0; i < _len; ++i)
+		for (int i = 0; i < dim; ++i)
 			_p[i] = va_arg(arg_ptr, double);
 		va_end(arg_ptr);
 	}
 
     template<unsigned dim>
-	Vecnd<dim>::Vecnd(const Vecnd<dim> &v) : _len(dim)
+	Vecnd<dim>::Vecnd(const Vecnd<dim> &v)
     {
-        memcpy(_p,v._p,sizeof(double)*_len);
+        memcpy(_p,v._p,sizeof(double)*dim);
     }
 	template<unsigned dim>
     Vecnd<dim>::~Vecnd()
     {
 		delete _p;
     }
+	template<unsigned dim>
+    Vecnd<dim>::Vecnd(double x[])
+    {
+		memcpy(_p,x,sizeof(double)*dim);
+    }
+
 
 //////////////////////////////////////////////////////////////////////////
 // Operators
@@ -41,59 +47,59 @@ namespace MyMath
 	template<unsigned dim>
 	Vecnd<dim>& Vecnd<dim>::operator =( const Vecnd<dim>& v)
     {
-        memcpy(_p,v._p,sizeof(double)*_len);        
+        memcpy(_p,v._p,sizeof(double)*dim);
         return (*this);
     }
 
 	template<unsigned dim>
     void Vecnd<dim>::operator +=(const Vecnd<dim>& v)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] += v._p[i];
     }
 	template<unsigned dim>
     void Vecnd<dim>::operator +=(double f)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] += f;
     }
 
 	template<unsigned dim>
     void Vecnd<dim>::operator -=(const Vecnd<dim>& v)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] -= v._p[i];
     }
 	template<unsigned dim>
     void Vecnd<dim>::operator -=(double f)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] -= f;
     }
 
 	template<unsigned dim>
     void Vecnd<dim>::operator *=(const Vecnd<dim>& v)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] *= v._p[i];
     }
 	template<unsigned dim>
     void Vecnd<dim>::operator *=(double f)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] *= f;
     }
 
 	template<unsigned dim>
     void Vecnd<dim>::operator /=(const Vecnd<dim>& v)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] /= v._p[i];
     }
 	template<unsigned dim>
     void Vecnd<dim>::operator /=(double f)
     {
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             _p[i] /= f;
     }
 
@@ -101,7 +107,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator +(const Vecnd<dim>&v) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] + v[i];
         return res;
     }
@@ -110,7 +116,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator +(double f) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] + f;
         return res;
     }
@@ -119,7 +125,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator -(const Vecnd<dim>&v) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] - v[i];
         return res;
     }
@@ -127,7 +133,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator -(double f) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] - f;
         return res;
     }
@@ -136,7 +142,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator *(const Vecnd<dim>&v) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] * v[i];
         return res;
     }
@@ -144,7 +150,7 @@ namespace MyMath
     Vecnd<dim> Vecnd<dim>::operator *(double f) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] * f;
         return res;
     }
@@ -153,7 +159,7 @@ namespace MyMath
 	Vecnd<dim> Vecnd<dim>::operator /(const Vecnd<dim>&v) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] / v[i];
         return res;
     }
@@ -161,7 +167,7 @@ namespace MyMath
 	Vecnd<dim> Vecnd<dim>::operator /(double f) const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = (*this)[i] / f;
         return res;
     }
@@ -170,7 +176,7 @@ namespace MyMath
 	Vecnd<dim> Vecnd<dim>::operator - () const
     {
         Vecnd<dim> res;
-        for(int i=0;i<_len;i++)
+        for(int i=0;i<dim;i++)
             res[i] = -(*this)[i];
         return res;
     }
@@ -189,12 +195,10 @@ namespace MyMath
     double Vecnd<dim>::L2Norm_Sqr()
     {
 		double sqr = 0;
-		for (int i = 0; i < _len; ++i)
+		for (int i = 0; i < dim; ++i)
 			sqr += _p[i] * _p[i];
         return sqr;
     }
 
 
 }
-
-

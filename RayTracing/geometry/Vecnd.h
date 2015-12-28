@@ -4,18 +4,15 @@
 #include "Num.h"
 #include <cassert>
 
-
 namespace MyMath
 {
+	using std::numeric_limits;
 	template <unsigned dim>
     class Vecnd
     {
 	public:
 		//Data field
-		struct{
-			double _p[dim];
-		};
-		unsigned _len;
+		double _p[dim];
 
     public:
 
@@ -23,6 +20,7 @@ namespace MyMath
         Vecnd();
         Vecnd(double x, ...);
         Vecnd(const Vecnd<dim>& v);
+		Vecnd(double x[]);
         //Deconstructor
         ~Vecnd();
     public:
@@ -31,27 +29,27 @@ namespace MyMath
         //Operator []
         inline double& operator [](unsigned index)
         {
-            assert(index<_len);
+            assert(index<dim);
             return _p[index];
         }
         inline const double& operator [](unsigned index) const
         {
-            assert(index<_len);
+            assert(index<dim);
             return _p[index];
         }
 
 		//Operator ()
 		inline double& operator ()(unsigned index)
 		{
-			assert(index < _len);
+			assert(index < dim);
 			return _p[index];
 		}
 		inline const double& operator ()(unsigned index) const
 		{
-			assert(index < _len);
+			assert(index < dim);
 			return _p[index];
 		}
-        
+
         //Operator =
         Vecnd<dim>& operator = (const Vecnd<dim>& v);
 
@@ -76,10 +74,19 @@ namespace MyMath
         Vecnd<dim> operator /(double f) const;
 
         Vecnd<dim> operator -() const;
-        
+
+		// static generator
+		static inline Vecnd<dim> max(){
+			return Vecnd<dim>::Vecnd(MAXNUM,MAXNUM,MAXNUM);
+		}
+
+		static inline Vecnd<dim> min(){
+			return Vecnd<dim>::Vecnd(MAXNUM,MAXNUM,MAXNUM);
+		}
+
     public:
         void Normalize();
-        double L2Norm_Sqr();       
+        double L2Norm_Sqr();
     };
 
 	typedef Vecnd<3> Vec3d;
