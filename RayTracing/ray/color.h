@@ -9,10 +9,17 @@
 #ifndef color_h
 #define color_h
 
-#include <vector>
+//#include "Vec3f.h"
 //color mode
 #define RGB 3
 #define RGBA 4
-typedef std::vector<char> Color;
+class Color{
+private:
+    union{
+        struct{
+            float r, g, b, a;
+        };
+    };
+};
 
 #endif /* color_h */

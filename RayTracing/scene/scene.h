@@ -11,7 +11,7 @@
 
 #include <list>
 #include "SimpleObject.h"
-#include "color.h"
+#include "../ray/color.h"
 #include "Material.h"
 
 namespace RayTracing{

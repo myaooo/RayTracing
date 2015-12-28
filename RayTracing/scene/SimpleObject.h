@@ -1,10 +1,10 @@
 #pragma once
-#include "Vecnd.h"
+#include "../geometry/Vec3d.h"
 #include <vector>
 
 namespace RayTracing
 {
-	typedef MyMath::Vecnd<3> Vec3d;
+    //typedef MyMath::Vec3d<3> Vec3d;
 	// A definition of array
 	// Later used to store triangle list
     template <typename T, int N> class Array 

@@ -9,18 +9,18 @@
 #ifndef ray_h
 #define ray_h
 
-#include "MyMath.h"
-#include "point3d.h"
+#include "../geometry/myMath.h"
+//#include "point3d.h"
 
 namespace RayTracing{
-	typedef MyMath::Vec3d Vec3d;
+    //typedef MyMath::Vec3d Vec3d;
     class Ray{
     public:
-        Point3d source;
+        Vec3d source;
         Vec3d direction;
         
     public:
-        Ray(Point3d & p, Vec3d d);
+        Ray(Vec3d & p, Vec3d d);
         
     };
 }

@@ -9,13 +9,12 @@
 #ifndef light_h
 #define light_h
 
-#include "color.h"
-#include "point3d.h"
-#include "Vecnd.h"
+#include "../ray/color.h"
+#include "../geometry/Vec3d.h"
 #include "SimpleObject.h"
 
 namespace RayTracing{
-	typedef MyMath::Vec3d Vec3d;
+    //typedef MyMath::Vec3d Vec3d;
     // Light
     class Light{
     public:
@@ -30,10 +29,10 @@ namespace RayTracing{
     class PointLight : public Light{
     public:
         // data field
-        Point3d source;
+        Vec3d source;
         // method
         // constructor
-        PointLight(Point3d & s, char * c, double strength);
+        PointLight(Vec3d & s, char * c, double strength);
         
     };
     

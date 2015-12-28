@@ -10,7 +10,7 @@
 #define MATH_H
 
 #include "Num.h"
-#include "Vecnd.h"
+#include "Vec3d.h"
 #include "Matrix.h"
 
 #endif
