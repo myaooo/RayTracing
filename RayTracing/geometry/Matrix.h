@@ -1,7 +1,5 @@
-
-
 //
-//  Num.h
+//  Matrix.h
 //  RayTracing
 //
 //  Created by Ming Yao on 15/10/26.

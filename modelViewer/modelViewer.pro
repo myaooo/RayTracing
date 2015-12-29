@@ -26,6 +26,7 @@ SOURCES += main.cpp\
     ../RayTracing/geometry/Vec3d.cpp
 
 HEADERS  += mainwindow.h \
+    ../RayTracing/util.h \
     ../RayTracing/camera/camera.h \
     ../RayTracing/geometry/geometry.h \
     ../RayTracing/geometry/Matrix.h \

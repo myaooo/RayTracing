@@ -213,6 +213,7 @@ DIST          = ../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/yacc.prf \
 		../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/lex.prf \
 		../modelViewer/modelViewer.pro ../modelViewer/mainwindow.h \
+		../RayTracing/util.h \
 		../RayTracing/camera/camera.h \
 		../RayTracing/geometry/geometry.h \
 		../RayTracing/geometry/Matrix.h \
@@ -604,7 +605,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../modelViewer/mainwindow.h ../RayTracing/camera/camera.h ../RayTracing/geometry/geometry.h ../RayTracing/geometry/Matrix.h ../RayTracing/geometry/myMath.h ../RayTracing/geometry/Num.h ../RayTracing/ray/color.h ../RayTracing/ray/ray.h ../RayTracing/scene/entity.h ../RayTracing/scene/light.h ../RayTracing/scene/Material.h ../RayTracing/scene/scene.h ../RayTracing/scene/SimpleObject.h ../RayTracing/scene/texture.h ../RayTracing/raytracer.h ../RayTracing/geometry/Vec3d.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../modelViewer/mainwindow.h ../RayTracing/util.h ../RayTracing/camera/camera.h ../RayTracing/geometry/geometry.h ../RayTracing/geometry/Matrix.h ../RayTracing/geometry/myMath.h ../RayTracing/geometry/Num.h ../RayTracing/ray/color.h ../RayTracing/ray/ray.h ../RayTracing/scene/entity.h ../RayTracing/scene/light.h ../RayTracing/scene/Material.h ../RayTracing/scene/scene.h ../RayTracing/scene/SimpleObject.h ../RayTracing/scene/texture.h ../RayTracing/raytracer.h ../RayTracing/geometry/Vec3d.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../modelViewer/main.cpp ../modelViewer/mainwindow.cpp ../RayTracing/camera/camera.cpp ../RayTracing/geometry/Matrix.cpp ../RayTracing/ray/ray.cpp ../RayTracing/scene/light.cpp ../RayTracing/scene/scene.cpp ../RayTracing/scene/SimpleObject.cpp ../RayTracing/raytracer.cpp ../RayTracing/geometry/Vec3d.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../modelViewer/mainwindow.ui $(DISTDIR)/
 
@@ -674,6 +675,7 @@ moc_mainwindow.cpp: ../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Hea
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
 		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/ray/color.h \
 		../modelViewer/mainwindow.h
 	/Users/Yao/Qt5.5.1/5.5/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/Yao/Qt5.5.1/5.5/clang_64/mkspecs/macx-clang -I/Users/Yao/Documents/code/RayTracing/modelViewer -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtGui.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtCore.framework/Headers -I. -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib ../modelViewer/mainwindow.h -o moc_mainwindow.cpp
 
@@ -737,6 +739,7 @@ main.o: ../modelViewer/main.cpp ../modelViewer/mainwindow.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
 		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/ray/color.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../modelViewer/main.cpp
@@ -781,6 +784,7 @@ mainwindow.o: ../modelViewer/mainwindow.cpp ../modelViewer/mainwindow.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
 		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/ray/color.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../modelViewer/mainwindow.cpp
 

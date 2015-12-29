@@ -30,6 +30,8 @@
 #include <QPlainTextEdit>
 
 #include "../RayTracing/geometry/Vec3d.h"
+#include "../RayTracing/ray/color.h"
+#include "../RayTracing/util.h"
 
 using namespace std;
 

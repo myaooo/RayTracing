@@ -3,23 +3,81 @@
 //  RayTracing
 //
 //  Created by Ming Yao on 15/10/29.
-//  Copyright © 2015年 Ming Yao. All rights reserved.
 //
 
 #ifndef color_h
 #define color_h
 
-//#include "Vec3f.h"
-//color mode
-#define RGB 3
-#define RGBA 4
-class Color{
+#include "../geometry/Vec3d.h"
+#include "util.h"
+#include <cmath>
+class Color : public Vec3d{
 private:
-    union{
-        struct{
-            float r, g, b, a;
-        };
-    };
+    //Vec3d _data;
+public:
+    Color(){}
+    Color(real_t r, real_t g, real_t b) : Vec3d(r,g,b){}
+    Color(const Vec3d & cdata) : Vec3d(cdata){}
+    Color(const Color & color) : Vec3d(color){}
+    bool black() const
+    { return fabs(r) < Epsilon && fabs(g) < Epsilon && fabs(b) < Epsilon; }
+
+    bool valid() const {
+        return (isBetween(r, 0, 1 + Epsilon)
+                && isBetween(g, 0, 1 + Epsilon)
+                && isBetween(b, 0, 1 + Epsilon));
+    }
+
+    Color operator + (const Color & c) const{
+        return Color(this->Vec3d::operator + (c));
+    }
+
+    Color& operator += (const Color & c){
+        this->Vec3d::operator += (c);
+        return *this;
+    }
+
+    Color & operator = (const Color & c){
+        this->Vec3d::operator = (c);
+        return *this;
+    }
+
+    Color operator - (const Color & c) const{
+        return Color(this->Vec3d::operator - (c));
+    }
+
+    Color& operator -= (const Color & c){
+        this->Vec3d::operator -=(c);
+        return *this;
+    }
+
+    Color operator * (real_t p) const{
+        return Color(this->Vec3d::operator *(p));
+    }
+
+    Color& operator *= (real_t p){
+        this->Vec3d::operator *= (p);
+        return *this;
+    }
+
+    Color operator * (const Color& c) const{
+        return Color(this->Vec3d::operator * (c));
+    }
+
+    Color& operator *= (const Color& c){
+        this->Vec3d::operator *= (c);
+        return *this;
+    }
+
+    Color operator / (real_t p) const{
+        return *this * (1.0 / p);
+    }
+
+   friend std::ostream & operator << (std::ostream &os, const Color& vec)
+   { return os << vec.r << " " << vec.g << " " << vec.b;}
+
+   static const Color WHITE, BLACK, RED, BLUE, GREEN, YELLOW, MAGNETA, CYAN;
+
 };
 
 #endif /* color_h */

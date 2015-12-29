@@ -1,17 +1,21 @@
-#ifndef VEC3D_H
-#define VEC3D_H
-#include "../util.h"
-#include <cassert>
-#include <cstring>
+//
+//  Vec4d.h
+//  RayTracing
+//
+//  Created by Ming Yao on 15/10/26.
+//
+#ifndef VEC4D_H
+#define VEC4D_H
 
-class Vec3d{
+class Vec4d{
 public:
+
     //Constructors
-    Vec3d();
-    Vec3d(real_t x,real_t y, real_t z);
-    Vec3d(const Vec3d& v);
+    Vec4d();
+    Vec4d(real_t x,real_t y, real_t z, real_t w);
+    Vec4d(const Vec4d& v);
     //Deconstructor
-    virtual ~Vec3d();
+    virtual ~Vec4d();
 public:
     //Operators
 
@@ -40,29 +44,29 @@ public:
     }
 
     //Operator =
-    Vec3d& operator = (const Vec3d& v);
+    Vec4d& operator = (const Vec4d& v);
 
     //Operators +=,-=, *=, /=
-    void operator +=(const Vec3d& v);
+    void operator +=(const Vec4d& v);
     void operator +=(real_t f);
-    void operator -=(const Vec3d& v);
+    void operator -=(const Vec4d& v);
     void operator -=(real_t f);
-    void operator *=(const Vec3d& v);
+    void operator *=(const Vec4d& v);
     void operator *=(real_t f);
-    void operator /=(const Vec3d& v);
+    void operator /=(const Vec4d& v);
     void operator /=(real_t f);
 
     //Operators +,-.*,/
-    Vec3d operator +(const Vec3d&v) const;
-    Vec3d operator +(real_t f) const;
-    Vec3d operator -(const Vec3d&v) const;
-    Vec3d operator -(real_t f) const;
-    Vec3d operator *(const Vec3d&v) const;
-    Vec3d operator *(real_t f) const;
-    Vec3d operator /(const Vec3d&v) const;
-    Vec3d operator /(real_t f) const;
+    Vec4d operator +(const Vec4d&v) const;
+    Vec4d operator +(real_t f) const;
+    Vec4d operator -(const Vec4d&v) const;
+    Vec4d operator -(real_t f) const;
+    Vec4d operator *(const Vec4d&v) const;
+    Vec4d operator *(real_t f) const;
+    Vec4d operator /(const Vec4d&v) const;
+    Vec4d operator /(real_t f) const;
 
-    Vec3d operator -() const;
+    Vec4d operator -() const;
 
 public:
     void Normalize();
@@ -72,13 +76,13 @@ public:
     union
     {
         struct
-        { real_t _p[3]; };
+        { real_t _p[4]; };
         struct
-        { real_t x,y,z; };
+        { real_t x,y,z,w; };
         struct
-        { real_t r,g,b; };
+        { real_t r,g,b,a; };
     };
-    enum {_len = 3};
+    enum {_len = 4};
 
 };
 

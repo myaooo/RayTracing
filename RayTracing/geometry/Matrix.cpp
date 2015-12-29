@@ -1,5 +1,5 @@
 ﻿//
-//  ray.cpp
+//  matrix.cpp
 //  RayTracing
 //
 //  Created by Ming Yao on 15/10/26.
@@ -67,7 +67,7 @@ namespace MyMath{
 	inline void Matrix4d::Multiply(Matrix4d& mOut, const Matrix4d& M1, const Matrix4d& M2){
 		for (unsigned i = 0; i < Four; ++i)
 			for (unsigned j = 0; j < Four;++j)
-				mOut.m[i][j] = M1(i, 0) * M2(0, j) + M1(i, 1) * M2(1, j) 
+				mOut.m[i][j] = M1(i, 0) * M2(0, j) + M1(i, 1) * M2(1, j)
 				+ M1(i, 2) * M2(2, j) + M1(i, 3) * M2(3, j);
 	}
 
