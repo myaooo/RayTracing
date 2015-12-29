@@ -6,6 +6,9 @@
 //
 
 class Entity{
+
+public:
+    
 public:
     virtual ~Entity(){};
 

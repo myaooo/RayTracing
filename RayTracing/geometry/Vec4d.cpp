@@ -65,85 +65,75 @@
         for(int i=0;i<_len;i++)
             _p[i] *= v._p[i];
     }
-    void Vec4d::operator *=(real_t f)
-    {
+    void Vec4d::operator *=(real_t f){
         for(int i=0;i<_len;i++)
             _p[i] *= f;
     }
 
-    void Vec4d::operator /=(const Vec4d& v)
-    {
+    void Vec4d::operator /=(const Vec4d& v){
         for(int i=0;i<_len;i++)
             _p[i] /= v._p[i];
     }
-    void Vec4d::operator /=(real_t f)
-    {
+    void Vec4d::operator /=(real_t f){
         for(int i=0;i<_len;i++)
             _p[i] /= f;
     }
 
-    Vec4d Vec4d::operator +(const Vec4d&v) const
-    {
+    Vec4d Vec4d::operator +(const Vec4d&v) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] + v[i];
         return res;
     }
-    Vec4d Vec4d::operator +(real_t f) const
-    {
+    Vec4d Vec4d::operator +(real_t f) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] + f;
         return res;
     }
 
-    Vec4d Vec4d::operator -(const Vec4d&v) const
-    {
+    Vec4d Vec4d::operator -(const Vec4d&v) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] - v[i];
         return res;
     }
-    Vec4d Vec4d::operator -(real_t f) const
-    {
+    Vec4d Vec4d::operator -(real_t f) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] - f;
         return res;
     }
 
-    Vec4d Vec4d::operator *(const Vec4d&v) const
-    {
+    Vec4d Vec4d::operator *(const Vec4d&v) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] * v[i];
         return res;
     }
-    Vec4d Vec4d::operator *(real_t f) const
-    {
+
+    Vec4d Vec4d::operator *(real_t f) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] * f;
         return res;
     }
 
-    Vec4d Vec4d::operator /(const Vec4d&v) const
-    {
+    Vec4d Vec4d::operator /(const Vec4d&v) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] / v[i];
         return res;
     }
-    Vec4d Vec4d::operator /(real_t f) const
-    {
+
+    Vec4d Vec4d::operator /(real_t f) const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = (*this)[i] / f;
         return res;
     }
 
-    Vec4d Vec4d::operator - () const
-    {
+    Vec4d Vec4d::operator - () const{
         Vec4d res;
         for(int i=0;i<_len;i++)
             res[i] = -(*this)[i];
@@ -152,11 +142,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Other Methods
-    void Vec4d::Normalize()
-    {
-        real_t fSqr = L2Norm_Sqr();
-        if(fSqr>1e-6)
-            (*this) *= 1.0f/sqrt(fSqr);
+    void Vec4d::Normalize(){
+        if(_p[3] < 1e-6)
+            (*this) *= 1.0f/_p[3];
     }
 
     real_t Vec4d::L2Norm_Sqr() const

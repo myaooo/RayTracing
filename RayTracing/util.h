@@ -15,6 +15,7 @@
 #define PI 3.1415926535f
 #define Epsilon 1e-6f
 #define FloatPrecision 1024
+#define COLORRANGE 255.0
 
 #define isBetween(a, b, c) ((a >= b) && (a <= c))
 #define getMin(a, b) (a > b ? b : a)
