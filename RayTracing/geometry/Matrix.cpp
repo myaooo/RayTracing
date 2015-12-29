@@ -59,10 +59,10 @@ namespace MyMath{
 	///////////////////////
 	// Methods
 	// 2 Multiply Methods
-//	inline void Matrix4d::Multiply(Vec4d& vOut, const Matrix4d& M, const Vec4d& V){
-//		for (int i = 0; i < Four; ++i)
-//			vOut(i) = M(i,0) * V(0) + M(i,1) * V(1) + M(i,2) * V(2) + M(i,3) * V(3);
-//	}
+	inline void Matrix4d::Multiply(Vec4d& vOut, const Matrix4d& M, const Vec4d& V){
+		for (int i = 0; i < Four; ++i)
+			vOut(i) = M(i,0) * V(0) + M(i,1) * V(1) + M(i,2) * V(2) + M(i,3) * V(3);
+	}
 
 	inline void Matrix4d::Multiply(Matrix4d& mOut, const Matrix4d& M1, const Matrix4d& M2){
 		for (unsigned i = 0; i < Four; ++i)
@@ -74,17 +74,14 @@ namespace MyMath{
 	// Coordinate Transform v' = vT*MT
 	inline void Matrix4d::Transform(Vec3d & result, const Vec3d & vin) const
 	{
-// 		result[0] = m[0][0] * vin[0] + m[1][0] * vin[1] + m[2][0] * vin[2] + m[3][0];
-// 		result[1] = m[0][1] * vin[0] + m[1][1] * vin[1] + m[2][1] * vin[2] + m[3][1];
-// 		result[2] = m[0][2] * vin[0] + m[1][2] * vin[1] + m[2][2] * vin[2] + m[3][2];
 		for (int i = 0; i < Four-1; ++i){
 			result(i) = m[i][0] * vin(0) + m[i][1] * vin(1) + m[i][2] * vin(2) + m[3][0];
 		}
 	}
-//	inline void Matrix4d::Transform(Vec4d& result, const Vec4d& vin) const
-//	{
-//		Multiply(result, *this, vin);
-//	}
+	inline void Matrix4d::Transform(Vec4d& result, const Vec4d& vin) const
+	{
+		Multiply(result, *this, vin);
+	}
 	inline void Matrix4d::TransformNormal(Vec3d & rs, const Vec3d& vin) const{
 
 	}
@@ -94,9 +91,9 @@ namespace MyMath{
 	inline void Matrix4d::TransposeTransform(Vec3d & rs, const Vec3d & vin) const{
 
 	}
-//	inline void Matrix4d::TransposeTransform(Vec4d& rs_d, const Vec4d& vin) const{
+	inline void Matrix4d::TransposeTransform(Vec4d& rs_d, const Vec4d& vin) const{
 
-//	}
+	}
 
 	// Static Method
 	inline void Matrix4d::Zero(Matrix4d& m){

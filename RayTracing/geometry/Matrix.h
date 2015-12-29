@@ -8,6 +8,7 @@
 #define MATRIX_H
 
 #include "Vec3d.h"
+#include "Vec4d.h"
 
 namespace MyMath{
 	class Matrix4d{
@@ -71,7 +72,7 @@ namespace MyMath{
 		// instead of return a duplicated variable
 		// Static Methods
 		static inline void Multiply(Matrix4d& mOut, const Matrix4d& M1, const Matrix4d& M2);
-        //static inline void Multiply(Vec4d& vOut, const Matrix4d& M1, const Vec4d& V2);
+        static inline void Multiply(Vec4d& vOut, const Matrix4d& M1, const Vec4d& V2);
 
 		double Inverse3D(Matrix4d& mOut_d) const;
 		double InverseFPU(Matrix4d& mOut_d) const;
@@ -79,11 +80,11 @@ namespace MyMath{
 
 		//Other Method
 		inline void Transform(Vec3d & result, const Vec3d& invec) const;
-        //inline void Transform(Vec4d& result, const Vec4d& invec) const;
+        inline void Transform(Vec4d& result, const Vec4d& invec) const;
 		inline void TransformNormal(Vec3d & result, const Vec3d& invec) const;
 		inline void TransposeTransformNormal(Vec3d & result, const Vec3d & invec) const;
 		inline void TransposeTransform(Vec3d & result, const Vec3d & invec) const;
-        //inline void TransposeTransform(Vec4d& result, const Vec4d& invec) const;
+        inline void TransposeTransform(Vec4d& result, const Vec4d& invec) const;
 	};
 
 }

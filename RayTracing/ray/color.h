@@ -10,6 +10,7 @@
 
 #include "../geometry/Vec3d.h"
 #include "util.h"
+#include <iostream>
 #include <cmath>
 class Color : public Vec3d{
 private:

@@ -9,8 +9,7 @@
 #ifndef MATH_H
 #define MATH_H
 
-#include "Num.h"
-#include "Vec3d.h"
+#include "../util.h"
 #include "Matrix.h"
 
 #endif

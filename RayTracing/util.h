@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <string>
+
 // color predefine in 0x16 format in strings
 #define COLOR_RED     "\x1b[31m"
 #define COLOR_GREEN   "\x1b[32m"
@@ -14,8 +15,6 @@
 #define PI 3.1415926535f
 #define Epsilon 1e-6f
 #define FloatPrecision 1024
-#define MAXNUM DBL_MAX
-#define MINNUM DBL_MIN
 
 #define isBetween(a, b, c) ((a >= b) && (a <= c))
 #define getMin(a, b) (a > b ? b : a)

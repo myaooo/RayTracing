@@ -67,6 +67,12 @@ public:
 public:
     void Normalize();
     real_t L2Norm_Sqr() const;
+    static inline Vec3d max(){
+        return Vec3d();
+    }
+    static inline Vec3d min(){
+        return Vec3d();
+    }
 
 public:
     union
