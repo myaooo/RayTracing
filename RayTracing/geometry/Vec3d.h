@@ -65,14 +65,14 @@ public:
     Vec3d operator -() const;
 
 public:
-    void Normalize();
+    void normalize();
     real_t L2Norm_Sqr() const;
-    static inline Vec3d max(){
-        return Vec3d();
-    }
-    static inline Vec3d min(){
-        return Vec3d();
-    }
+    real_t getNorm() const;
+    // get the cross product of vec3d a and vec3d b
+    static inline Vec3d cross(const Vec3d & a, const Vec3d & b);
+    static inline real_t dot(const Vec3d & a, const Vec3d & b);
+    static inline Vec3d max();
+    static inline Vec3d min();
 
 public:
     union

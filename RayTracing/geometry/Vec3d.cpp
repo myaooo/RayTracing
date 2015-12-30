@@ -1,6 +1,7 @@
 #include "util.h"
 #include "Vec3d.h"
 #include <math.h>
+#include "float.h"
 
 //////////////////////////////////////////////////////////////////////////
 //  Constructors and Deconstructors
@@ -149,14 +150,33 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Other Methods
-    void Vec3d::Normalize()
+    void Vec3d::normalize()
     {
-        real_t fSqr = L2Norm_Sqr();
+        real_t fSqr = getNorm();
         if(fSqr>1e-6)
-            (*this) *= 1.0f/sqrt(fSqr);
+            (*this) *= 1.0f/fSqr;
     }
 
     real_t Vec3d::L2Norm_Sqr() const
     {
         return _p[0]*_p[0] + _p[1]*_p[1] + _p[2]*_p[2];
+    }
+
+    real_t Vec3d::getNorm() const{
+        return sqrt(this->L2Norm_Sqr());
+    }
+
+    static inline Vec3d Vec3d::cross(const Vec3d & a, const Vec3d & b){
+        return Vec3d(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+    }
+
+    static inline real_t Vec3d::dot(const Vec3d & a, const Vec3d & b){
+        return a.x*b.x + a.y*b.y + a.z*b.z;
+    }
+
+    static inline Vec3d max(){
+        return Vec3d(DBL_MAX,DBL_MAX,DBL_MAX);
+    }
+    static inline Vec3d min(){
+        return Vec3d(DBL_MIN,DBL_MIN,DBL_MIN);
     }

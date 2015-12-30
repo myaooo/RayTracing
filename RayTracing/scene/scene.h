@@ -3,7 +3,6 @@
 //  RayTracing
 //
 //  Created by Ming Yao on 15/10/26.
-//  Copyright © 2015年 Ming Yao. All rights reserved.
 //
 
 #ifndef scene_h
@@ -23,7 +22,7 @@ namespace RayTracing{
     private:
         // Type definition
         typedef std::list<Object> ObjectList;
-        
+
         // data field
         ObjectList objects;
     public:

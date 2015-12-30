@@ -1,3 +1,9 @@
+//
+//  util.h
+//  RayTracing
+//
+//  Created by Ming Yao on 15/10/26.
+//
 #ifndef UTIL_H
 #define UTIL_H
 
