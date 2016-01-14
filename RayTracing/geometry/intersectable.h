@@ -8,17 +8,27 @@
 #ifndef INTERSECTABLE_H
 #define INTERSECTABLE_H
 
-#include "../geometry/myMath.h"
+#include "myMath.h"
 #include "ray.h"
 
-namespace RayTracing{
+namespace MyMath{
+
+    // intersection type
+    // INSIDE - the ray in travelling from inside to outside of an object
+    // OUTSIDE - the ray is travelling in the air
+    enum IntersectType{ MISSED = 0, INTERSECTED = 1, INSIDE = 2};
+
+    // base class of all intersectable geometry objects
     class Intersectable{
     public:
-        // get the point vec3d where ray intersect this object
-        //virtual Vec3d doIntersect(const Ray & ray) const = 0;
+        // check whether the ray intersect with the geometry
         virtual bool isIntersect(const Ray & ray) const = 0;
-        virtual bool intersect(real_t & intersectPos, const Ray & ray) const = 0;
+        // do intersection between the ray and the geometry
+        // stores the intersecting position in intersectPos
+        virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const = 0;
     };
+
+
 };
 
 #endif

@@ -10,10 +10,14 @@
 
 #include "intersectable.h"
 #include "Vec3d.h"
+#include "../util.h"
 namespace MyMath{
     //BBox is a class that define a geometry concept box, or bounding box.
     // The box is alines with the world coordinate
     class BBox : public Intersectable{
+    private:
+        // hot tmin, tmax
+        mutable real_t _hotTMin, _hotTMax;
     public:
 		// data
 		Vec3d minVec;
@@ -21,13 +25,15 @@ namespace MyMath{
 	public:
 		// Methods
 		// Default Constructors
-		BBox(){
+        BBox(){
 			Init();
 		}
+        // Constructor
+        BBox(const Vec3d & _min, const Vec3d & _max) : minVec(_min), maxVec(_max){}
 		// Default initialization
 		inline void Init(){
-			minVec = Vec3d::getgetMax();
-			maxVec = -Vec3d::getgetMax();
+            minVec = Vec3d::maxVec();
+            maxVec = -Vec3d::maxVec();
 		}
 		// Find the dimension that have the max length
 		inline int getMaxDimension(){
@@ -62,36 +68,67 @@ namespace MyMath{
             }
         }
 
-        // virtual Vec3d doIntersect(const Ray & ray) const{
-        //     // not expected to be used.
-        //     Vec3d intersect_point(0,0,0);
-        //     return intersect_point;
-        // }
-        virtual bool isIntersect(const Ray & ray) const{
-            return false;
+        // test intersect function
+        // returns true if the ray intersect with the box
+        // Woo algorithm
+        virtual bool isIntersect(const Ray & r) const override{
+            real_t tmin, tmax, tymin, tymax, tzmin, tzmax;
+            if (r.getDirection().x >= 0) { // x > 0, the near face is the xmin
+                tmin = (minVec.x - r.getSource().x) * r.inv_direction.x;
+                tmax = (maxVec.x - r.getSource().x) * r.inv_direction.x;
+            }
+            else { // x < 0, the near face is the xmax
+                tmin = (maxVec.x - r.getSource().x) * r.inv_direction.x;
+                tmax = (minVec.x - r.getSource().x) * r.inv_direction.x;
+            }
+            if (r.getDirection().y >= 0) { // y > 0, the near face is the ymin
+                tymin = (minVec.y - r.getSource().y) * r.inv_direction.y;
+                tymax = (maxVec.y - r.getSource().y) * r.inv_direction.y;
+            }
+            else { // y < 0, the near face is the ymax
+                tymin = (maxVec.y - r.getSource().y) * r.inv_direction.y;
+                tymax = (minVec.y - r.getSource().y) * r.inv_direction.y;
+            }
+            if ( (tymax < tmin) || (tmax < tymin) ) // not intersecting the box
+                return false;
+            if (tmin < tymin)
+                tmin = tymin;
+            if (tymax < tmax)
+                tmax = tymax;
+            if (r.getDirection().z >= 0) {
+                tzmin = (minVec.z - r.getSource().z) * r.inv_direction.z;
+                tzmax = (maxVec.z - r.getSource().z) * r.inv_direction.z;
+            }
+            else {
+                tzmin = (maxVec.z - r.getSource().z) * r.inv_direction.z;
+                tzmax = (minVec.z - r.getSource().z) * r.inv_direction.z;
+            }
+            if ( (tmin > tzmax) || (tzmin > tmax) )
+                return false;
+            if (tzmin > tmin)
+                tmin = tzmin;
+            if (tzmax < tmax)
+                tmax = tzmax;
+            _hotTMin = tmin;
+            _hotTMax = tmax;
+            return ( (tmin < r.t1) && (tmax > 0) );
         }
 
-        virtual bool intersect(real_t & intersectPos, const Ray & ray) const{
-            // float tmin, tmax, tymin, tymax, tzmin, tzmax;
-            // tmin = (bounds[r.sign[0]].x - r.origin.x) * r.inv_direction.x;
-            // tmax = (bounds[1-r.sign[0]].x - r.origin.x) * r.inv_direction.x;
-            // tymin = (bounds[r.sign[1]].y - r.origin.y) * r.inv_direction.y;
-            // tymax = (bounds[1-r.sign[1]].y - r.origin.y) * r.inv_direction.y;
-            // if ( (tmin > tymax) || (tymin > tmax) )
-            //     return false;
-            // if (tymin > tmin)
-            //     tmin = tymin;
-            // if (tymax < tmax)
-            //     tmax = tymax;
-            // tzmin = (bounds[r.sign[2]].z - r.origin.z) * r.inv_direction.z;
-            // tzmax = (bounds[1-r.sign[2]].z - r.origin.z) * r.inv_direction.z;
-            // if ( (tmin > tzmax) || (tzmin > tmax) )
-            //     return false;
-            // if (tzmin > tmin)
-            //     tmin = tzmin;
-            // if (tzmax < tmax)
-            //     tmax = tzmax;
-            // return ( (tmin < t1) && (tmax > t0) );
+        virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{
+            if (isIntersect(ray)) {
+                intersectPos = InfDistance;
+                return MISSED;
+            }
+            else{
+                if (_hotTMin < 0) {
+                    intersectPos = _hotTMax;
+                    return INSIDE;
+                }
+                else{
+                    intersectPos = _hotTMin;
+                    return INTERSECTED;
+                }
+            }
         }
 
 

@@ -29,8 +29,8 @@
 #include <QSlider>
 #include <QPlainTextEdit>
 
-#include "../RayTracing/geometry/Vec3d.h"
-#include "../RayTracing/ray/color.h"
+#include "../RayTracing/geometry.h"
+#include "../RayTracing/color.h"
 #include "../RayTracing/util.h"
 
 using namespace std;

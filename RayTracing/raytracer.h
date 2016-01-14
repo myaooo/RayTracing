@@ -17,8 +17,9 @@ namespace RayTracing{
         Scene * scenePtr;
     public:
         RayTracer(){}
-        RayTracer(Camera c, const Scene * s) : cam(c), scenePtr(s){}
+        RayTracer(Camera c,  Scene * const & s) : cam(c), scenePtr(s){}
         void RayTrace();
+        
     };
 }
 

@@ -8,28 +8,32 @@
 #include "renderer.h"
 #include "util.h"
 
-using namespace cv;
+namespace RayTracing{
+    using namespace cv;
+    typedef MyMath::Vec3d Vec3d;
 
-Renderer::Renderer(int w, int h) : width(w), height(h) : image(w,h,CV_8UC3,Scalar(0,0,0)){}
+    Renderer::Renderer(int w, int h) : width(w), height(h), image(w,h,CV_8UC3,Scalar(0,0,0)){}
 
-void Renderer::saveImage(string filepath){
+    void Renderer::saveImage(string filepath){
 
-}
+    }
 
-Vec3d Renderer::getPixel(int x, int y) const{
-    Vec3d pixel;
-    uchar * yptr = image.ptr(y);
-    pixel.r = yptr[3*x+2]/COLORRANGE;
-    pixel.g = yptr[3*x+1]/COLORRANGE;
-    pixel.b = yptr[3*x]/COLORRANGE;
-    return pixel;
-}
+    Vec3d Renderer::getPixel(int x, int y) const{
+        Vec3d pixel;
+        const uchar * yptr = image.ptr(y);
+        pixel.r = yptr[3*x+2]/COLORRANGE;
+        pixel.g = yptr[3*x+1]/COLORRANGE;
+        pixel.b = yptr[3*x]/COLORRANGE;
+        return pixel;
+    }
 
-static Vec3d getPixel(const cv::Mat & im, int x, int y){
-    Vec3d pixel;
-    uchar * yptr = im.ptr(y);
-    pixel.r = yptr[3*x+2]/COLORRANGE;
-    pixel.g = yptr[3*x+1]/COLORRANGE;
-    pixel.b = yptr[3*x]/COLORRANGE;
-    return pixel;
+    static Vec3d getPixel(const cv::Mat & im, int x, int y){
+        Vec3d pixel;
+        const uchar * yptr = im.ptr(y);
+        pixel.r = yptr[3*x+2]/COLORRANGE;
+        pixel.g = yptr[3*x+1]/COLORRANGE;
+        pixel.b = yptr[3*x]/COLORRANGE;
+        return pixel;
+    }
+
 }

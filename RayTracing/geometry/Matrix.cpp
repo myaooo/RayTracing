@@ -145,7 +145,7 @@ namespace MyMath{
 	void Matrix4d::RotateM(Matrix4d& result, const Vec3d & axis, double rad){
 		Vec3d nAxis=axis;
 		// First Normalize the vector axis
-		nAxis.Normalize();
+        nAxis.normalize();
 		RotateNormM(result, nAxis, rad);
 	}
 	void Matrix4d::RotateNormM(Matrix4d& result, const Vec3d & naxis, double rad){

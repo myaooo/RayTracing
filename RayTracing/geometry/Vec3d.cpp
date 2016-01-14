@@ -3,6 +3,7 @@
 #include <math.h>
 #include "float.h"
 
+namespace MyMath{
 //////////////////////////////////////////////////////////////////////////
 //  Constructors and Deconstructors
     Vec3d::Vec3d(void)
@@ -166,17 +167,4 @@
         return sqrt(this->L2Norm_Sqr());
     }
 
-    static inline Vec3d Vec3d::cross(const Vec3d & a, const Vec3d & b){
-        return Vec3d(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
-    }
-
-    static inline real_t Vec3d::dot(const Vec3d & a, const Vec3d & b){
-        return a.x*b.x + a.y*b.y + a.z*b.z;
-    }
-
-    static inline Vec3d max(){
-        return Vec3d(DBL_MAX,DBL_MAX,DBL_MAX);
-    }
-    static inline Vec3d min(){
-        return Vec3d(DBL_MIN,DBL_MIN,DBL_MIN);
-    }
+} // end of namespace MyMath

@@ -7,17 +7,19 @@
 
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include "../ray/color.h"
+#include "../color.h"
 #include "Material.h"
 #include <memory>
 #include <iostream>
 
-typedef std::shared_ptr shared_ptr;
 namespace RayTracing{
+    using std::make_shared;
+    typedef std::shared_ptr<Material> MaterialPtr;
     /* Base Class of Texture*/
     class TextureBase{
-        virtual shared_ptr<Material> getMaterial() const = 0;
-        virtual shared_ptr<Material> getMaterial(real_t x, real_t y) const{
+    public:
+        virtual MaterialPtr getMaterial() const = 0;
+        virtual MaterialPtr getMaterial(real_t x, real_t y) const{
             return nullptr;
         }
         virtual ~TextureBase(){}
@@ -25,16 +27,16 @@ namespace RayTracing{
 
     class MonoTexture :public TextureBase {
 	private:
-		const Material& materialPtr;
+		const Material& material;
 	public:
-		MonoTexture(const Material& m_ptr) : materialPtr(m_ptr){}
+		MonoTexture(const Material& m) : material(m){}
 
-		shared_ptr<Material> getMaterial(real_t, real_t) const override {
-			return make_shared<Material>(materialPtr);
+		MaterialPtr getMaterial(real_t, real_t) const override {
+			return make_shared<Material>(material);
 		}
 
-		shared_ptr<Material> getMaterial() const override{
-            return make_shared<Material>(materialPtr);
+		MaterialPtr getMaterial() const override{
+            return make_shared<Material>(material);
         }
     };
 

@@ -9,21 +9,24 @@
 #ifndef light_h
 #define light_h
 
-#include "../ray/color.h"
-#include "../geometry/Vec3d.h"
+#include "../color.h"
+#include "../geometry.h"
+#include "../util.h"
 #include "SimpleObject.h"
 
 namespace RayTracing{
-    //typedef MyMath::Vec3d Vec3d;
     // Light
     class Light{
+    // http://en.wikipedia.org/wiki/Phong_reflection_model
     public:
         // data field
-        Color color;
-        double strength;
+        // diffuse color and specular color of the light
+        Color diffuse, specular;
+        // the intensities of diffuse and specular
+        real_t DIntensity, SIntensity;
         // method
         // creator
-        Light(char *c, double strength);
+        Light(char *c, real_t strength);
     };
     // Point Light
     class PointLight : public Light{
@@ -32,10 +35,10 @@ namespace RayTracing{
         Vec3d source;
         // method
         // constructor
-        PointLight(Vec3d & s, char * c, double strength);
-        
+        PointLight(Vec3d & s, char * c, real_t strength);
+
     };
-    
+
     // Parallel Light
     class ParaLight : public PointLight{
     public:
@@ -46,7 +49,7 @@ namespace RayTracing{
 		ParaLight(Vec3d & orient);
         ParaLight(Vec3d & orient, PointLight& pl);
     };
-    
+
     // Light Obj
     class ObjLight : public Light{
         CSimpleObject obj;

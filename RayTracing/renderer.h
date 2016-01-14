@@ -10,23 +10,28 @@
 
 #include <string>
 #include <opencv2/opencv.hpp>
-#include "myMath.h"
+#include "geometry.h"
 #include "color.h"
+#include "scene/scene.h"
+#include "raytracer.h"
 #include "camera/camera.h"
 
-class Renderer{
-private:
-    int width;
-    int height;
-    cv::Mat image;
-    Camera cam;
-public:
-    Renderer(){}
-    Renderer(int w, int h);
-    void saveImage(string filepath);
-    Vec3d getPixel(int x, int y) const;
-    static Vec3d getPixel(const cv::Mat & im, int x, int y);
+namespace RayTracing{
+    using std::string;
+    class Renderer{
+    private:
+        int width;
+        int height;
+        cv::Mat image;
+        Camera cam;
+    public:
+        Renderer(){}
+        Renderer(int w, int h);
+        void saveImage(string filepath);
+        Vec3d getPixel(int x, int y) const;
+        static Vec3d getPixel(const cv::Mat & im, int x, int y);
 
-};
+    }; // end of class renderer
+}
 
 #endif // !RENDERER_H

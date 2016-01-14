@@ -15,7 +15,7 @@ CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefau
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.7 -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7 -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../modelViewer -I. -I../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers -I../../../../Qt5.5.1/5.5/clang_64/lib/QtGui.framework/Headers -I../../../../Qt5.5.1/5.5/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I../../../../Qt5.5.1/5.5/clang_64/mkspecs/macx-clang -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib
+INCPATH       = -I../modelViewer -I. -I/../usr/local/include -I../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers -I../../../../Qt5.5.1/5.5/clang_64/lib/QtGui.framework/Headers -I../../../../Qt5.5.1/5.5/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I../../../../Qt5.5.1/5.5/clang_64/mkspecs/macx-clang -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib
 QMAKE         = /Users/Yao/Qt5.5.1/5.5/clang_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = modelViewer1.0.0
 DISTDIR = /Users/Yao/Documents/code/RayTracing/build-modelViewer-Desktop_Qt_5_5_1_clang_64bit-Debug/.tmp/modelViewer1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -headerpad_max_install_names -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -stdlib=libc++ -mmacosx-version-min=10.7 -Wl,-rpath,/Users/Yao/Qt5.5.1/5.5/clang_64/lib
-LIBS          = $(SUBLIBS) -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL 
+LIBS          = $(SUBLIBS) -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib -L/Users/Yao/Documents/code/RayTracing/modelViewer/../../../../../../../usr/local/lib/ -lopencv_core.3.0.0 -lopencv_imgproc.3.0.0 -lopencv_imgcodecs.3.0.0 -lopencv_highgui.3.0.0 -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL 
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -52,22 +52,26 @@ SOURCES       = ../modelViewer/main.cpp \
 		../modelViewer/mainwindow.cpp \
 		../RayTracing/camera/camera.cpp \
 		../RayTracing/geometry/Matrix.cpp \
-		../RayTracing/ray/ray.cpp \
+		../RayTracing/geometry/Vec3d.cpp \
+		../RayTracing/geometry/Vec4d.cpp \
 		../RayTracing/scene/light.cpp \
 		../RayTracing/scene/scene.cpp \
 		../RayTracing/scene/SimpleObject.cpp \
+		../RayTracing/color.cpp \
 		../RayTracing/raytracer.cpp \
-		../RayTracing/geometry/Vec3d.cpp moc_mainwindow.cpp
+		../RayTracing/renderer.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		camera.o \
 		Matrix.o \
-		ray.o \
+		Vec3d.o \
+		Vec4d.o \
 		light.o \
 		scene.o \
 		SimpleObject.o \
+		color.o \
 		raytracer.o \
-		Vec3d.o \
+		renderer.o \
 		moc_mainwindow.o
 DIST          = ../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.5.1/5.5/clang_64/mkspecs/qdevice.pri \
@@ -213,31 +217,39 @@ DIST          = ../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/yacc.prf \
 		../../../../Qt5.5.1/5.5/clang_64/mkspecs/features/lex.prf \
 		../modelViewer/modelViewer.pro ../modelViewer/mainwindow.h \
-		../RayTracing/util.h \
 		../RayTracing/camera/camera.h \
-		../RayTracing/geometry/geometry.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/geometry/intersectable.h \
 		../RayTracing/geometry/Matrix.h \
 		../RayTracing/geometry/myMath.h \
 		../RayTracing/geometry/Num.h \
-		../RayTracing/ray/color.h \
-		../RayTracing/ray/ray.h \
-		../RayTracing/scene/entity.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
 		../RayTracing/scene/light.h \
-		../RayTracing/scene/Material.h \
+		../RayTracing/scene/material.h \
+		../RayTracing/scene/renderable.h \
+		../RayTracing/scene/rplane.h \
 		../RayTracing/scene/scene.h \
 		../RayTracing/scene/SimpleObject.h \
 		../RayTracing/scene/texture.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
 		../RayTracing/raytracer.h \
-		../RayTracing/geometry/Vec3d.h ../modelViewer/main.cpp \
+		../RayTracing/renderer.h \
+		../RayTracing/util.h ../modelViewer/main.cpp \
 		../modelViewer/mainwindow.cpp \
 		../RayTracing/camera/camera.cpp \
 		../RayTracing/geometry/Matrix.cpp \
-		../RayTracing/ray/ray.cpp \
+		../RayTracing/geometry/Vec3d.cpp \
+		../RayTracing/geometry/Vec4d.cpp \
 		../RayTracing/scene/light.cpp \
 		../RayTracing/scene/scene.cpp \
 		../RayTracing/scene/SimpleObject.cpp \
+		../RayTracing/color.cpp \
 		../RayTracing/raytracer.cpp \
-		../RayTracing/geometry/Vec3d.cpp
+		../RayTracing/renderer.cpp
 QMAKE_TARGET  = modelViewer
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = modelViewer.app/Contents/MacOS/modelViewer
@@ -605,8 +617,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../modelViewer/mainwindow.h ../RayTracing/util.h ../RayTracing/camera/camera.h ../RayTracing/geometry/geometry.h ../RayTracing/geometry/Matrix.h ../RayTracing/geometry/myMath.h ../RayTracing/geometry/Num.h ../RayTracing/ray/color.h ../RayTracing/ray/ray.h ../RayTracing/scene/entity.h ../RayTracing/scene/light.h ../RayTracing/scene/Material.h ../RayTracing/scene/scene.h ../RayTracing/scene/SimpleObject.h ../RayTracing/scene/texture.h ../RayTracing/raytracer.h ../RayTracing/geometry/Vec3d.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../modelViewer/main.cpp ../modelViewer/mainwindow.cpp ../RayTracing/camera/camera.cpp ../RayTracing/geometry/Matrix.cpp ../RayTracing/ray/ray.cpp ../RayTracing/scene/light.cpp ../RayTracing/scene/scene.cpp ../RayTracing/scene/SimpleObject.cpp ../RayTracing/raytracer.cpp ../RayTracing/geometry/Vec3d.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../modelViewer/mainwindow.h ../RayTracing/camera/camera.h ../RayTracing/geometry/bbox.h ../RayTracing/geometry/intersectable.h ../RayTracing/geometry/Matrix.h ../RayTracing/geometry/myMath.h ../RayTracing/geometry/Num.h ../RayTracing/geometry/plane.h ../RayTracing/geometry/ray.h ../RayTracing/geometry/Vec3d.h ../RayTracing/geometry/Vec4d.h ../RayTracing/scene/light.h ../RayTracing/scene/material.h ../RayTracing/scene/renderable.h ../RayTracing/scene/rplane.h ../RayTracing/scene/scene.h ../RayTracing/scene/SimpleObject.h ../RayTracing/scene/texture.h ../RayTracing/color.h ../RayTracing/geometry.h ../RayTracing/raytracer.h ../RayTracing/renderer.h ../RayTracing/util.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../modelViewer/main.cpp ../modelViewer/mainwindow.cpp ../RayTracing/camera/camera.cpp ../RayTracing/geometry/Matrix.cpp ../RayTracing/geometry/Vec3d.cpp ../RayTracing/geometry/Vec4d.cpp ../RayTracing/scene/light.cpp ../RayTracing/scene/scene.cpp ../RayTracing/scene/SimpleObject.cpp ../RayTracing/color.cpp ../RayTracing/raytracer.cpp ../RayTracing/renderer.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../modelViewer/mainwindow.ui $(DISTDIR)/
 
 
@@ -674,10 +686,19 @@ moc_mainwindow.cpp: ../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Hea
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qslider.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
 		../RayTracing/geometry/Vec3d.h \
-		../RayTracing/ray/color.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/color.h \
 		../modelViewer/mainwindow.h
-	/Users/Yao/Qt5.5.1/5.5/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/Yao/Qt5.5.1/5.5/clang_64/mkspecs/macx-clang -I/Users/Yao/Documents/code/RayTracing/modelViewer -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtGui.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtCore.framework/Headers -I. -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib ../modelViewer/mainwindow.h -o moc_mainwindow.cpp
+	/Users/Yao/Qt5.5.1/5.5/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/Yao/Qt5.5.1/5.5/clang_64/mkspecs/macx-clang -I/Users/Yao/Documents/code/RayTracing/modelViewer -I/../usr/local/include -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtGui.framework/Headers -I/Users/Yao/Qt5.5.1/5.5/clang_64/lib/QtCore.framework/Headers -I. -F/Users/Yao/Qt5.5.1/5.5/clang_64/lib ../modelViewer/mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -738,8 +759,17 @@ main.o: ../modelViewer/main.cpp ../modelViewer/mainwindow.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qslider.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
 		../RayTracing/geometry/Vec3d.h \
-		../RayTracing/ray/color.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/color.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../modelViewer/main.cpp
@@ -783,48 +813,192 @@ mainwindow.o: ../modelViewer/mainwindow.cpp ../modelViewer/mainwindow.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qslider.h \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/QPlainTextEdit \
 		../../../../Qt5.5.1/5.5/clang_64/lib/QtWidgets.framework/Headers/qplaintextedit.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
 		../RayTracing/geometry/Vec3d.h \
-		../RayTracing/ray/color.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/color.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../modelViewer/mainwindow.cpp
 
 camera.o: ../RayTracing/camera/camera.cpp ../RayTracing/camera/camera.h \
-		../RayTracing/geometry/Vec3d.h
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/scene/scene.h \
+		../RayTracing/scene/SimpleObject.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/scene/renderable.h \
+		../RayTracing/scene/texture.h \
+		../RayTracing/scene/Material.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camera.o ../RayTracing/camera/camera.cpp
 
 Matrix.o: ../RayTracing/geometry/Matrix.cpp ../RayTracing/geometry/Matrix.h \
-		../RayTracing/geometry/Vec3d.h
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Vec4d.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Matrix.o ../RayTracing/geometry/Matrix.cpp
 
-ray.o: ../RayTracing/ray/ray.cpp ../RayTracing/ray/ray.h \
-		../RayTracing/geometry/myMath.h \
-		../RayTracing/geometry/Num.h \
-		../RayTracing/geometry/Vec3d.h \
-		../RayTracing/geometry/Matrix.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ray.o ../RayTracing/ray/ray.cpp
+Vec3d.o: ../RayTracing/geometry/Vec3d.cpp ../RayTracing/geometry/Vec3d.h \
+		../RayTracing/util.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Vec3d.o ../RayTracing/geometry/Vec3d.cpp
+
+Vec4d.o: ../RayTracing/geometry/Vec4d.cpp ../RayTracing/geometry/Vec4d.h \
+		../RayTracing/util.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Vec4d.o ../RayTracing/geometry/Vec4d.cpp
 
 light.o: ../RayTracing/scene/light.cpp ../RayTracing/scene/light.h \
-		../RayTracing/ray/color.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
 		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
 		../RayTracing/scene/SimpleObject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o light.o ../RayTracing/scene/light.cpp
 
 scene.o: ../RayTracing/scene/scene.cpp ../RayTracing/scene/scene.h \
 		../RayTracing/scene/SimpleObject.h \
 		../RayTracing/geometry/Vec3d.h \
-		../RayTracing/ray/color.h \
+		../RayTracing/util.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/geometry/Matrix.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/scene/renderable.h \
+		../RayTracing/scene/texture.h \
 		../RayTracing/scene/Material.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene.o ../RayTracing/scene/scene.cpp
 
 SimpleObject.o: ../RayTracing/scene/SimpleObject.cpp ../RayTracing/scene/SimpleObject.h \
-		../RayTracing/geometry/Vec3d.h
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/util.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SimpleObject.o ../RayTracing/scene/SimpleObject.cpp
 
-raytracer.o: ../RayTracing/raytracer.cpp ../RayTracing/raytracer.h
+color.o: ../RayTracing/color.cpp ../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o color.o ../RayTracing/color.cpp
+
+raytracer.o: ../RayTracing/raytracer.cpp ../RayTracing/raytracer.h \
+		../RayTracing/camera/camera.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/scene/scene.h \
+		../RayTracing/scene/SimpleObject.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/scene/renderable.h \
+		../RayTracing/scene/texture.h \
+		../RayTracing/scene/Material.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o raytracer.o ../RayTracing/raytracer.cpp
 
-Vec3d.o: ../RayTracing/geometry/Vec3d.cpp ../RayTracing/geometry/Vec3d.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Vec3d.o ../RayTracing/geometry/Vec3d.cpp
+renderer.o: ../RayTracing/renderer.cpp /../usr/local/include/opencv2/opencv.hpp \
+		/../usr/local/include/opencv2/core.hpp \
+		/../usr/local/include/opencv2/core/cvdef.h \
+		/../usr/local/include/opencv2/hal/defs.h \
+		/../usr/local/include/opencv2/core/version.hpp \
+		/../usr/local/include/opencv2/core/base.hpp \
+		/../usr/local/include/opencv2/core/cvstd.hpp \
+		/../usr/local/include/opencv2/core/ptr.inl.hpp \
+		/../usr/local/include/opencv2/hal.hpp \
+		/../usr/local/include/opencv2/core/sse_utils.hpp \
+		/../usr/local/include/opencv2/core/traits.hpp \
+		/../usr/local/include/opencv2/core/matx.hpp \
+		/../usr/local/include/opencv2/core/types.hpp \
+		/../usr/local/include/opencv2/core/mat.hpp \
+		/../usr/local/include/opencv2/core/bufferpool.hpp \
+		/../usr/local/include/opencv2/core/mat.inl.hpp \
+		/../usr/local/include/opencv2/core/persistence.hpp \
+		/../usr/local/include/opencv2/core/operations.hpp \
+		/../usr/local/include/opencv2/core/cvstd.inl.hpp \
+		/../usr/local/include/opencv2/core/utility.hpp \
+		/../usr/local/include/opencv2/core/core_c.h \
+		/../usr/local/include/opencv2/core/types_c.h \
+		/../usr/local/include/opencv2/core/optim.hpp \
+		/../usr/local/include/opencv2/imgproc.hpp \
+		/../usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/../usr/local/include/opencv2/imgproc/types_c.h \
+		/../usr/local/include/opencv2/photo.hpp \
+		/../usr/local/include/opencv2/photo/photo_c.h \
+		/../usr/local/include/opencv2/video.hpp \
+		/../usr/local/include/opencv2/video/tracking.hpp \
+		/../usr/local/include/opencv2/video/background_segm.hpp \
+		/../usr/local/include/opencv2/video/tracking_c.h \
+		/../usr/local/include/opencv2/features2d.hpp \
+		/../usr/local/include/opencv2/flann/miniflann.hpp \
+		/../usr/local/include/opencv2/flann/defines.h \
+		/../usr/local/include/opencv2/flann/config.h \
+		/../usr/local/include/opencv2/objdetect.hpp \
+		/../usr/local/include/opencv2/objdetect/detection_based_tracker.hpp \
+		/../usr/local/include/opencv2/objdetect/objdetect_c.h \
+		/../usr/local/include/opencv2/calib3d.hpp \
+		/../usr/local/include/opencv2/core/affine.hpp \
+		/../usr/local/include/opencv2/calib3d/calib3d_c.h \
+		/../usr/local/include/opencv2/imgcodecs.hpp \
+		/../usr/local/include/opencv2/videoio.hpp \
+		/../usr/local/include/opencv2/highgui.hpp \
+		/../usr/local/include/opencv2/highgui/highgui_c.h \
+		/../usr/local/include/opencv2/imgcodecs/imgcodecs_c.h \
+		/../usr/local/include/opencv2/videoio/videoio_c.h \
+		/../usr/local/include/opencv2/ml.hpp \
+		../RayTracing/renderer.h \
+		../RayTracing/color.h \
+		../RayTracing/geometry.h \
+		../RayTracing/geometry/myMath.h \
+		../RayTracing/util.h \
+		../RayTracing/geometry/Matrix.h \
+		../RayTracing/geometry/Vec3d.h \
+		../RayTracing/geometry/Vec4d.h \
+		../RayTracing/geometry/plane.h \
+		../RayTracing/geometry/intersectable.h \
+		../RayTracing/geometry/ray.h \
+		../RayTracing/geometry/bbox.h \
+		../RayTracing/camera/camera.h \
+		../RayTracing/scene/scene.h \
+		../RayTracing/scene/SimpleObject.h \
+		../RayTracing/scene/renderable.h \
+		../RayTracing/scene/texture.h \
+		../RayTracing/scene/Material.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o renderer.o ../RayTracing/renderer.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

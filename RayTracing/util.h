@@ -8,7 +8,7 @@
 #define UTIL_H
 
 #include <string>
-
+#include <float.h>
 // color predefine in 0x16 format in strings
 #define COLOR_RED     "\x1b[31m"
 #define COLOR_GREEN   "\x1b[32m"
@@ -20,21 +20,24 @@
 
 #define PI 3.1415926535f
 #define Epsilon 1e-6f
+#define Inf DBL_MAX
+#define InfDistance 1e10
 #define FloatPrecision 1024
 #define COLORRANGE 255.0
 
 #define isBetween(a, b, c) ((a >= b) && (a <= c))
 #define getMin(a, b) (a > b ? b : a)
 #define getMax(a, b) (a > b ? a : b)
+#define getSqr(a) ((a) * (a))
 
-template <class T>
-inline T Min(const T& la, const T& ra){
-    return la > ra ? ra : la;
-}
-template <class T>
-inline T Max(const T & la, const T & ra){
-    return la > ra ? la : ra;
-}
+// template <class T>
+// inline T Min(const T& la, const T& ra){
+//     return la > ra ? ra : la;
+// }
+// template <class T>
+// inline T Max(const T & la, const T & ra){
+//     return la > ra ? la : ra;
+// }
 
 typedef double real_t;
 

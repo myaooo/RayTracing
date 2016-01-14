@@ -25,8 +25,8 @@ namespace  RayTracing {
     //     Vec3d getPix(real_t x, real_t y) const;
     // };
 
-    #define HORIZONTAL_RAD = (60*PI/180)
-    #define VERTICAL_RAD = (60*PI/180)
+    #define HORIZONTAL_RAD (60*PI/180)
+    #define VERTICAL_RAD (60*PI/180)
 
     class Camera{
     private:

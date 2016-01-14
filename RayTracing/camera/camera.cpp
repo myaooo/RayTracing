@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include "camera.h"
-#include "../geometry/myMath.h"
+#include "../geometry.h"
 #include "../geometry/ray.h"
 #include "util.h"
 
@@ -41,7 +41,8 @@ namespace RayTracing{
     void Camera::init(){
         Matrix4d::Zero(transformMatrix);
         // initalize view center
-        Vec3d orient = (foc-pos).normalize();
+        Vec3d orient = (focus-position);
+        orient.normalize();
         viewCenter = position + orient * distance;
         // initialzie horiVec and vertVec
         if ((fabs(orient.y) > Epsilon) || (fabs(orient.x) > Epsilon)){
@@ -78,7 +79,7 @@ namespace RayTracing{
         if (y < -1 || y > 1) {
             std::cerr<<"y: wrong range!\n";
         }
-        Vec3d dest = viewCenter + x * horiVec + y * vertVec;
+        Vec3d dest = viewCenter + horiVec * x + vertVec * y;
         Vec3d direct = dest - position;
         return Ray(position, direct);
     }

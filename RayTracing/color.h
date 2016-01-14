@@ -8,10 +8,12 @@
 #ifndef color_h
 #define color_h
 
-#include "../geometry/Vec3d.h"
+#include "geometry.h"
 #include "util.h"
 #include <iostream>
 #include <cmath>
+namespace RayTracing{
+using namespace MyMath;
 class Color : public Vec3d{
 private:
     //Vec3d _data;
@@ -81,4 +83,5 @@ public:
 
 };
 
+}
 #endif /* color_h */

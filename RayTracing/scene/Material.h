@@ -7,14 +7,30 @@
 
 #ifndef MATERIAL_H
 #define MATERIAL_H
-#include "../ray/color.h"
+#include "../color.h"
+#include "../util.h"
 namespace RayTracing{
+    // http://en.wikipedia.org/wiki/Phong_reflection_model
     class Material{
-        Color color;
-		bool Reflect;
-		bool Refract;
-		bool Lambert;
-		bool Environment;
+    public:
+        // phong parameters
+        Color diffuse;
+        Color specular;
+        real_t ambient;
+        real_t shininess;
+
+        // transparency
+        real_t transparency;
+        // refractivity
+        real_t refractivity;
+
+    public:
+        // Constructor
+        Material(){}
+        Material( const Color & diff, const Color & spec,
+                real_t ambt, real_t shin, real_t tran ) :
+                diffuse(diff), specular(spec), ambient(ambt),
+                shininess(shin), transparency(tran) {}
 
     };
 }

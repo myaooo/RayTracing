@@ -8,6 +8,7 @@
 #include "Vec4d.h"
 #include <math.h>
 
+namespace MyMath{
 //////////////////////////////////////////////////////////////////////////
 //  Constructors and Deconstructors
     Vec4d::Vec4d(void){
@@ -151,3 +152,5 @@
     {
         return _p[0]*_p[0] + _p[1]*_p[1] + _p[2]*_p[2];
     }
+
+}
