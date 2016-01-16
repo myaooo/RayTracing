@@ -12,60 +12,90 @@
 #include "Vec3d.h"
 #include "../util.h"
 namespace MyMath{
-    //BBox is a class that define a geometry concept box, or bounding box.
-    // The box is alines with the world coordinate
+    // SuperPlane is a class that define a geometry super plane, or axis aligned plane
+    class SuperPlane {
+    public:
+        enum Axis { ERROR = -1, AXIS_X = 0, AXIS_Y, AXIS_Z };
+        Axis axis;
+        real_t position;
+
+        //SuperPlane() : axis(ERROR) {}
+        SuperPlane(int a = -1, real_t pos = 0) : axis(static_cast<Axis>(a)), position(pos){}
+    };
+
+
+    // BBox is a class that define a geometry concept box, or bounding box.
+    // The box is aligned with the world coordinate
     class BBox : public Intersectable{
     private:
         // hot tmin, tmax
         mutable real_t _hotTMin, _hotTMax;
     public:
-		// data
-		Vec3d minVec;
-		Vec3d maxVec;
-	public:
-		// Methods
-		// Default Constructors
-        BBox(){
-			Init();
-		}
+        // data
+        Vec3d minVec;
+        Vec3d maxVec;
+    public:
+        // Methods
+        // Default Constructors
+        BBox() {
+            reset();
+        }
         // Constructor
-        BBox(const Vec3d & _min, const Vec3d & _max) : minVec(_min), maxVec(_max){}
-		// Default initialization
-		inline void Init(){
+        BBox(const Vec3d & _min, const Vec3d & _max) : minVec(_min), maxVec(_max) {}
+        // Default initialization
+        inline void reset() {
             minVec = Vec3d::maxVec;
             maxVec = Vec3d::minVec;
-		}
-		// Find the dimension that have the max length
-		inline int getMaxDimension(){
-			real_t xsize = maxVec.x - minVec.x;
-			real_t ysize = maxVec.y - minVec.y;
-			real_t zsize = maxVec.z - minVec.z;
-			if (xsize > ysize){
-				if (xsize > zsize)
-					return 0;
-				else
-					return 2;
-			}
-			else{
-				if (ysize > zsize)
-					return 1;
-				else
-					return 2;
-			}
-		}
+        }
+        // Find the dimension that have the max length
+        inline int getMaxDimension() {
+            real_t xsize = maxVec.x - minVec.x;
+            real_t ysize = maxVec.y - minVec.y;
+            real_t zsize = maxVec.z - minVec.z;
+            if (xsize > ysize) {
+                if (xsize > zsize)
+                    return 0;
+                else
+                    return 2;
+            }
+            else {
+                if (ysize > zsize)
+                    return 1;
+                else
+                    return 2;
+            }
+        }
+        bool hasPoint(const Vec3d & p) {
+            return (minVec < p && p < maxVec);
+        }
         // union another BBox box with this BBox
-        inline void Union(const BBox & box){
+        inline void unite(const BBox & box){
             for (size_t i = 0; i < 3; i++) {
                 minVec[i] = getMin(box.minVec[i], minVec[i]);
                 maxVec[i] = getMax(box.maxVec[i], maxVec[i]);
             }
         }
         // union another point
-        inline void Union(const Vec3d &v){
+        inline void unite(const Vec3d &v){
             for (size_t i = 0; i < 3; i++) {
                 minVec[i] = getMin(v[i], minVec[i]);
                 maxVec[i] = getMax(v[i], maxVec[i]);
             }
+        }
+
+        void split(BBox & boxA, BBox & boxB, const SuperPlane& pl) const {
+            boxA = *this;
+            boxB = *this;
+            assert(isBetween(pl.position, minVec[pl.axis] + Epsilon,
+                maxVec[pl.axis] - Epsilon));
+                // in case there is a too small box or a same box
+            boxA.maxVec[pl.axis] = pl.position;
+            boxB.minVec[pl.axis] = pl.position;
+        }
+
+        real_t surfaceArea() {
+            Vec3d temp = maxVec - minVec;
+            return temp[0] * (temp[1] + temp[2]) + temp[1] * temp[2];
         }
 
         // test intersect function
@@ -132,6 +162,6 @@ namespace MyMath{
         }
 
 
-	};
+    };
 }
 #endif //!BBOX_H

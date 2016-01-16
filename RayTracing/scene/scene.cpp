@@ -14,9 +14,8 @@
 
 using std::make_shared;
 namespace RayTracing{
-    void Scene::addLight( const Light & light){
+    void Scene::addLight( const LightPtr & lightPtr){
         configed = false;
-        LightPtr lightPtr = make_shared<Light>(light);
         lights.push_back(lightPtr);
     }
 
@@ -83,13 +82,13 @@ namespace RayTracing{
         return true;
     }
 
-    void config(){
+    void Scene::config(){
         if (configed) return;
         if (lights.size() < 1){
             std::cerr<<"no lights!"<<std::endl;
         }
         for (auto light : lights)
-            ambient += light->color * light->intensity;
+            ambient += light->color * light->getIntensity();
         ambient *= ENVIRONMENT_FACTOR;
         configed = true;
     }

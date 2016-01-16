@@ -18,18 +18,17 @@
 namespace RayTracing{
 	#define ENVIRONMENT_FACTOR 0.005
     class Scene{
-    private:
+    public:
         // Type definition
         typedef std::list<RenderablePtr> ObjectList;
         typedef std::list<LightPtr> LightList;
         // data field
         ObjectList objects;
         LightList lights;
-    public:
-        // public variables
         bool enableTree = false;
         bool configed = false;
         Color ambient = Color::BLACK;
+    public:
         // de-constructor
         ~Scene(){
             objects.clear();
@@ -44,7 +43,7 @@ namespace RayTracing{
             return lights.size();
         }
 
-        void addLight( const Light & light);
+        void addLight( const LightPtr & lightPtr);
 
         void addObject( const RenderablePtr & renderablePtr);
 
@@ -53,7 +52,7 @@ namespace RayTracing{
         IntersectInfoPtr getLightIntersect(const Ray & ray) const;
 
         bool hasObjectIntersect(const Ray & ray) const;
-        bool hasLightIntersect(const Ray & ray) const
+        bool hasLightIntersect(const Ray & ray) const;
 
         bool buildTree();
 

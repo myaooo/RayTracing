@@ -14,12 +14,12 @@
 #define ABS(a) ((a) > 0 ? (a) : -(a))
 #define isEqual(a, b) (ABS(a-b) < Epsilon)
 
-namespace MyMath{
-    class Vec3d{
+namespace MyMath {
+    class Vec3d {
     public:
         //Constructors
         Vec3d();
-        Vec3d(real_t x,real_t y, real_t z);
+        Vec3d(real_t x, real_t y, real_t z);
         Vec3d(const Vec3d& v);
         //Deconstructor
         virtual ~Vec3d();
@@ -27,26 +27,22 @@ namespace MyMath{
         //Operators
 
         //Operator []
-        inline real_t& operator [](int index)
-        {
-            assert(index>=0&&index<3);
+        inline real_t& operator [](int index) {
+            assert(index >= 0 && index < 3);
             return _p[index];
         }
-        inline const real_t& operator [](int index) const
-        {
-            assert(index>=0&&index<3);
+        inline const real_t& operator [](int index) const {
+            assert(index >= 0 && index < 3);
             return _p[index];
         }
 
         //Operator ()
-        inline real_t& operator ()(int index)
-        {
-            assert(index>=0&&index<3);
+        inline real_t& operator ()(int index) {
+            assert(index >= 0 && index < 3);
             return _p[index];
         }
-        inline const real_t& operator ()(int index) const
-        {
-            assert(index>=0&&index<3);
+        inline const real_t& operator ()(int index) const {
+            assert(index >= 0 && index < 3);
             return _p[index];
         }
 
@@ -75,44 +71,51 @@ namespace MyMath{
 
         Vec3d operator -() const;
 
+        //Operators < >
+        bool operator < (const Vec3d &) const;
+        bool operator > (const Vec3d &) const;
+
     public:
         void normalize();
-        real_t L2Norm_Sqr() const;
+        real_t getNormSqr() const;
         real_t getNorm() const;
+        Vec3d getMirror(const Vec3d & norm) const;
         // get the cross product of vec3d a and vec3d b
         static inline Vec3d cross(const Vec3d & a, const Vec3d & b);
         static inline real_t dot(const Vec3d & a, const Vec3d & b);
         //static inline Vec3d maxVec();
         //static inline Vec3d minVec();
         //static inline Vec3d zeroVec();
-        bool operator == (const Vec3d & a){
-            return (isEqual(this->x,a.x) && isEqual(this->y, a.y) && isEqual(this->z,a.z));
+        bool operator == (const Vec3d & a) {
+            return (isEqual(this->x, a.x) && isEqual(this->y, a.y) && isEqual(this->z, a.z));
         }
 
-        bool operator != (const Vec3d & a){
+        bool operator != (const Vec3d & a) {
             return !(this->operator == (a));
         }
 
     public:
-        union
-        {
-            struct
-            { real_t _p[3]; };
-            struct
-            { real_t x,y,z; };
-            struct
-            { real_t r,g,b; };
+        union {
+            struct {
+                real_t _p[3];
+            };
+            struct {
+                real_t x, y, z;
+            };
+            struct {
+                real_t r, g, b;
+            };
         };
-        enum {_len = 3};
+        enum { _len = 3 };
 
         static const Vec3d maxVec, minVec, zeroVec;
     }; // end of vec3d
 
-    inline Vec3d Vec3d::cross(const Vec3d & a, const Vec3d & b){
+    inline Vec3d Vec3d::cross(const Vec3d & a, const Vec3d & b) {
         return Vec3d(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
     }
 
-    inline real_t Vec3d::dot(const Vec3d & a, const Vec3d & b){
+    inline real_t Vec3d::dot(const Vec3d & a, const Vec3d & b) {
         return a.x*b.x + a.y*b.y + a.z*b.z;
     }
 

@@ -14,16 +14,18 @@ namespace RayTracing{
     typedef MyMath::Plane Plane;
     // renderable plane
     class RPlane : public Renderable{
-    private:
+    public:
         Plane plane;
     public:
         // Constructors
         RPlane(){}
-        RPlane(const Plane & pl, const TexturePtr & _texture) :
+        RPlane(const Plane & pl, const TexturePtr & _texture = nullptr) :
             Renderable(_texture), plane(pl){}
-        RPlane(const Vec3d & p, const Vec3d& n, const TexturePtr & _texture) :
+        RPlane(const Vec3d & p, const Vec3d& n, const TexturePtr & _texture = nullptr) :
             Renderable(_texture), plane(p,n){}
-        RPlane(real_t a, real_t b, real_t c, real_t d, const TexturePtr & _texture) :
+        RPlane(const Vec3d & n, real_t d, const TexturePtr & _texture = nullptr) :
+            Renderable(_texture), plane(n,d) {}
+        RPlane(real_t a, real_t b, real_t c, real_t d, const TexturePtr & _texture = nullptr) :
             Renderable(_texture), plane(a,b,c,d){}
         // Methods
         // input a ray, and get the intersection info

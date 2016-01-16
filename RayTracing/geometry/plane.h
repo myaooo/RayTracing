@@ -55,7 +55,7 @@ namespace MyMath{
 
         virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{
             real_t dot = testIntersect(intersectPos, ray);
-            if (intersectPos <= 0 || Intersectpos >= ray.range) {
+            if (intersectPos <= 0 || intersectPos >= ray.range) {
                 return MISSED;
             }
             return dot < 0 ? INTERSECTED : INSIDE;

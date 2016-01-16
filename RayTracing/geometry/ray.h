@@ -65,6 +65,11 @@ namespace MyMath{
             assert(r>0);
             range = r;
         }
+
+        void offsetSource(real_t delta) {
+            source += direction * delta;
+            range -= delta;
+        }
     };
 }
 

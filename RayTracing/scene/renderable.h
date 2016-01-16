@@ -75,7 +75,9 @@ namespace RayTracing{
         // get the reflective ray
         Ray getReflectRay(){
             Vec3d reflectDirect = inRay.getDirection() + norm * 2 * cosi;
-            return Ray(inRay.getPoint(intersectPos), reflectDirect);
+            Ray ray(inRay.getPoint(intersectPos), reflectDirect);
+            ray.offsetSource(Epsilon);
+            return ray;
         }
 
         // get the refractive ray
@@ -87,11 +89,21 @@ namespace RayTracing{
             real_t cost = sqrt(1 - getSqr(refractivity) * (1 - getSqr(cosi)));
             Vec3d refractDirect = inRay.getDirection() * refractivity
                 + norm * (cost - refractivity * cosi);
-            return Ray(inRay.getPoint(intersectPos), refractDirect);
+            Ray ray(inRay.getPoint(intersectPos), refractDirect);
+            ray.offsetSource(Epsilon);
+            return ray;
         }
         // get Intersect Point
         Vec3d getIntersectPoint(){
-            return inRay.getIntersectPoint(intersectPos);
+            return inRay.getPoint(intersectPos);
+        }
+
+        bool isReflectable() {
+            return materialPtr->specular.getNormSqr() < Epsilon;
+        }
+
+        bool isRefractable() {
+            return materialPtr->refract.getNormSqr() < Epsilon;
         }
     };
 }

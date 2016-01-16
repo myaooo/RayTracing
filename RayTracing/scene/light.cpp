@@ -8,70 +8,57 @@
 
 #include "light.h"
 
-namespace RayTRacing{
+namespace RayTracing {
 
     /*
     * Light
     */
-    void Light::setDiffuse(const Color & d){
-        diffuse = d;
+    void Light::setColor(const Color & s) {
+        color = s;
     }
-    void Light::setSpecular(const Color & s){
-        specular = s;
-    }
-    void Light::setDIntensity(real_t dS){
+    void Light::setIntensity(real_t dS) {
         assert(dS > 0);
-        DIntensity = dS;
+        Intensity = dS;
     }
-    void Light::setSIntensity(real_t sS){
-        assert(sS > 0);
-        SIntensity = sS;
+    Color Light::getColor() const {
+        return color;
     }
-    Color Light::getDiffuse() const{
-        return diffuse;
-    }
-    Color Light::getSpecular() const{
-        return specular;
-    }
-    real_t Light::getDIntensity() const{
-        return DIntensity;
-    }
-    real_t Light::getSIntensity() const{
-        return SIntensity;
+    real_t Light::getIntensity() const {
+        return Intensity;
     }
 
     /*
     * SphereLight
     */
-    virtual IntersectInfoPtr SphereLight::getIntersect(const Ray & ray) const {
+    IntersectInfoPtr SphereLight::getIntersect(const Ray & ray) const {
         return RSphere::getIntersect(ray);
     }
 
-    virtual BBox SphereLight::getBBox() const {
+    BBox SphereLight::getBBox() const {
         return RSphere::getBBox();
     }
 
-    virtual Ray SphereLight::genRay(const Vec3d & source) const {
+    Ray SphereLight::genRay(const Vec3d & source) const {
         Vec3d direction = RSphere::getCenter() - source;
         real_t range = direction.getNorm();
-        return Ray(source,direction,range);
+        return Ray(source, direction, range);
     }
 
     /*
     * ParaLight
     */
-    virtual IntersectInfoPtr ParaLight::getIntersect(const Ray & ray) const {
-        return RSphere::getIntersect(ray);
+    ParaLight::ParaLight(const Vec3d & orient, real_t d, const Light & light) :
+        RPlane(orient,d), Light(light) {}
+    IntersectInfoPtr ParaLight::getIntersect(const Ray & ray) const {
+        return RPlane::getIntersect(ray);
     }
 
-    virtual BBox ParaLight::getBBox() const {
-        return RSphere::getBBox();
+    BBox ParaLight::getBBox() const {
+        return RPlane::getBBox();
     }
 
-    virtual Ray ParaLight::genRay(const Vec3d & source) const {
-        Vec3d direction = RSphere::getCenter() - source;
-        real_t range = direction.getNorm();
-        return Ray(source,direction,range);
+    Ray ParaLight::genRay(const Vec3d & source) const {
+        return Ray(source, plane.norm);
     }
 
 }

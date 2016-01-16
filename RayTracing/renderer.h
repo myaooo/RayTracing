@@ -22,14 +22,27 @@ namespace RayTracing{
     private:
         int width;
         int height;
-        cv::Mat image;
-        Camera cam;
+        int centerX;
+        int centerY;
+        mutable MyMath::Matrix<Color> imageBuffer;
+        Camera camera;
+        RayTracer tracer;
+        Scene scene;
     public:
         Renderer(){}
+        Renderer(int w, int h, const Camera & cam);
         Renderer(int w, int h);
+        ~Renderer();
         void saveImage(string filepath);
         Vec3d getPixel(int x, int y) const;
         static Vec3d getPixel(const cv::Mat & im, int x, int y);
+        real_t renderAll();
+        void addLight(const Light & light);
+        void addObject(const RenderablePtr & renderable);
+
+    protected:
+        void init();
+        void write(const Color & c, int x, int y);
 
     }; // end of class renderer
 }

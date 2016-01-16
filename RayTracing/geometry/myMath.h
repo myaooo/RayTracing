@@ -9,6 +9,6 @@
 #define MATH_H
 
 #include "../util.h"
-#include "Matrix.h"
+#include "matrix.h"
 
 #endif

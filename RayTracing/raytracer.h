@@ -12,9 +12,12 @@
 #include "color.h"
 #include "camera/camera.h"
 #include <cassert>
+#include <cmath>
 
 namespace RayTracing{
     #define DEFAULT_MAX_DEPTH 40
+    #define DISSIPATION 0.03
+    #define getDissipator(dist) (exp(-(dist)*DISSIPATION))
     typedef Scene * ScenePtr;
     class RayTracer{
     public:
@@ -46,12 +49,12 @@ namespace RayTracing{
         // the entrance of trace function
         virtual Color doTrace(const Ray & ray) const;
 
+        virtual Color doTrace(real_t x, real_t y) const;
+
     protected:
         virtual Color traceRay(const Ray & ray, int depth) const;
 
         Color getLocalPhong(const IntersectInfoPtr & infoPtr) const;
-
-
 
     };
 

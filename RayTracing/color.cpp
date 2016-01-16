@@ -14,5 +14,6 @@ namespace RayTracing{
                 Color::GREEN(0, 1, 0),
                 Color::YELLOW(1, 1, 0),
                 Color::CYAN(0, 1, 1),
-                Color::MAGNETA(1, 0, 1);
+                Color::MAGNETA(1, 0, 1),
+                Color::NONE(0,0,0);
 }

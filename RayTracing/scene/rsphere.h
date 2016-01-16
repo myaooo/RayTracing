@@ -43,12 +43,12 @@ namespace RayTracing{
             return BBox(sphere.center-sphere.radius, sphere.center+sphere.radius);
         }
 
-        Vec3d getCenter(){
+        Vec3d getCenter() const{
             return sphere.center;
         }
 
-        real_t getRadius(){
-            return sphere;
+        real_t getRadius() const{
+            return sphere.radius;
         }
 
         void setCenter(const Vec3d & vec){

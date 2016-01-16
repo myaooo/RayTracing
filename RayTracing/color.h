@@ -87,7 +87,7 @@ public:
    friend std::ostream & operator << (std::ostream &os, const Color& c)
    { return os << c.r << " " << c.g << " " << c.b;}
 
-   static const Color WHITE, BLACK, RED, BLUE, GREEN, YELLOW, MAGNETA, CYAN;
+   static const Color WHITE, BLACK, RED, BLUE, GREEN, YELLOW, MAGNETA, CYAN, NONE;
 
 };
 

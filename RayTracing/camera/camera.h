@@ -10,7 +10,7 @@
 
 #include "../geometry/myMath.h"
 #include "../scene/scene.h"
-#include "util.h"
+#include "../util.h"
 
 namespace  RayTracing {
     // Class ViewPlane
@@ -47,18 +47,20 @@ namespace  RayTracing {
         // The distance between the camera and the view plane
         real_t distance;
         // Transform Matrix
-        Matrix4d transformMatrix;
+        // Matrix4d transformMatrix;
 
     public:
         Camera(){}
-        Camera(const Vec3d& pos, const Vec3d& foc,
+        Camera(const Vec3d& pos, const Vec3d& foc = Vec3d::zeroVec,
             real_t h_a = HORIZONTAL_RAD, real_t v_a = VERTICAL_RAD, real_t dist = 10);
         void init();
         void setPosition(const Vec3d & pos){
             position = pos;
+            init();
         }
         void setFocus(const Vec3d & foc){
             focus = foc;
+            init();
         }
         void rotate(real_t degree);
         void orbit(real_t degree);

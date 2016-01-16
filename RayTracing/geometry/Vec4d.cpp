@@ -4,7 +4,7 @@
 //
 //  Created by Ming Yao on 15/10/26.
 //
-#include "util.h"
+#include "../util.h"
 #include "Vec4d.h"
 #include <math.h>
 

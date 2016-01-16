@@ -1,106 +1,121 @@
 //
-//  Matrix.h
+//  matrix.h
 //  RayTracing
 //
 //  Created by Ming Yao on 15/10/26.
 //
+
 #ifndef MATRIX_H
 #define MATRIX_H
+#include "../util.h"
+#include <cstring>
+#include <cassert>
 
-#include "Vec3d.h"
-#include "Vec4d.h"
+namespace MyMath {
+    // a template matrix class
+    // row first, column second
+    template <typename T>
+    class Matrix {
+    public:
+        // data fields
+        T **data;
+        int length[2];
+        // length[0] - row length
+        // length[1] - column length
+    public:
+        Matrix(int w=100, int h=100) : length{w,h} {
+            allocate();
+        }
 
-namespace MyMath{
-	class Matrix4d{
-	public:
-		// data field
-		union{
-			double data[16];
-			double m[4][4];
-			struct{
-				double _11, _12, _13, _14,
-					_21, _22, _23, _24,
-					_31, _32, _33, _34,
-					_41, _42, _43, _44;
-			};
-		};
-		static const unsigned Sixteen = 16;
-		static const unsigned Four = 4;
-	public:
-		//Constructors
-		Matrix4d(const Matrix4d & m);
-		Matrix4d(double p);
-		Matrix4d(){}
+        Matrix(T** v, int w, int h) : length{ w, h } {
+            allocate();
+            copy(v);
+        }
 
-		// Operator
-		inline double& operator () (unsigned x, unsigned y){
-			assert(x < Four && y < Four);
-			return m[x][y];
-		}
-		inline const double& operator()(unsigned x, unsigned y)const{
-			assert(x < Four && y < Four);
-			return m[x][y];
-		}
-		inline Matrix4d operator * (const Matrix4d& M) const;
-        //inline Vec4d operator * (const Vec4d& M) const;
-		inline Matrix4d operator - (const Matrix4d& M) const;
-		inline Matrix4d operator + (const Matrix4d& M) const;
-		inline void operator +=(const Matrix4d& M);
-		inline void operator -=(const Matrix4d& M);
+        ~Matrix() {
+            free();
+        }
 
-		// Static Method
-		//Create random Matrix
-        static inline void zero(Matrix4d& m);
-        static inline void eye(Matrix4d& m);
-		static inline void random(Matrix4d& m);
-		static void lookAt(Matrix4d& result, const Vec3d & pos, const Vec3d & center, const Vec3d & up);
-		static inline void rotateXM(Matrix4d& result, double rad);
-		static inline void rotateYM(Matrix4d& result, double rad);
-		static inline void rotateZM(Matrix4d& result, double rad);
-		static void rotateM(Matrix4d& result, const Vec3d & axis, double rad);
-		static void rotateNormM(Matrix4d& result, const Vec3d & naxis, double rad);
-		static void rotateM(Matrix4d& result, double xrad, double yrad, double zrad);
-		//Create scale transform Matrix
-		static inline void scaleM(Matrix4d& result, double sx, double sy, double sz);
-		//Create translate transform Matrix
-		static inline void translateM(Matrix4d& result, double tx, double ty, double tz);
+        Matrix(const Matrix& m) {
+            length[0] = m.length[0];
+            length[1] = m.length[1];
+            allocate();
+            copy(m.data);
+        }
 
-		// Matrix calculation methods
-		// For a better speed performance, here we use a value transfer function
-		// instead of return a duplicated variable
-		// Static Methods
-		static inline void multiply(Matrix4d& mOut, const Matrix4d& M1, const Matrix4d& M2);
-        static inline void multiply(Vec4d& vOut, const Matrix4d& M1, const Vec4d& V2);
+        Matrix & operator = (const Matrix & m) {
+            if (this != &m) {
+                length[0] = m.length[0];
+                length[1] = m.length[1];
+                allocate();
+                copy(m.data);
+            }
+            return *this;
+        }
 
-		double inverse3D(Matrix4d& mOut_d) const;
-		double inverseFPU(Matrix4d& mOut_d) const;
-		inline double inverse(Matrix4d& mOut_d) const;
+        Matrix & operator = (Matrix && r) {
+            assert(this != &r);
+            this->free();
+            this->data = r.data;
+            length[0] = r.length[0];
+            length[1] = r.length[1];
+            r.data = nullptr;
+            return *this;
+        }
 
-		//Other Method
-		inline void transform(Vec3d & result, const Vec3d& invec) const;
-        inline void transform(Vec4d& result, const Vec4d& invec) const;
-		inline void transformNormal(Vec3d & result, const Vec3d& invec) const;
-		inline void transposetransformNormal(Vec3d & result, const Vec3d & invec) const;
-		inline void transposetransform(Vec3d & result, const Vec3d & invec) const;
-        inline void transposetransform(Vec4d& result, const Vec4d& invec) const;
+        Matrix(Matrix&& r) {
+            data = r.data;
+            length[0] = r.length[0];
+            length[1] = r.length[1];
+            r.data = nullptr;
+        }
 
-	};
-    // Static Method
-	inline void Matrix4d::random(Matrix4d& m){
-		for (int i = 0; i < Sixteen; ++i)
-			m.data[i] = rand() / (double)RAND_MAX;
-	}
+        // get the ith row
+        T*& operator [] (int i) {
+            assert((0 <= i) && (i <= length[1]));
+            return data[i];
+        }
 
-    inline void Matrix4d::zero(Matrix4d& m){
-        for (int i = 0; i < Sixteen; ++i)
-            m.data[i] = 0;
-    }
-    inline void Matrix4d::eye(Matrix4d& m){
-        zero(m);
-        for (int i = 0; i < Four; ++i)
-            m(i, i) = 1;
-    }
+        const T*& operator [] (int i) const {
+            assert((0 <= i) && (i <= length[1]));
+            return data[i];
+        }
+
+        // get the element at the ith row, the jth column
+        T & operator () (int i, int j) {
+            assert((0 <= i) && (i <= length[1]));
+            assert((0 <= j) && (j <= length[0]));
+            return data[i][j];
+        }
+        const T & operator () (int i, int j) const {
+            assert((0 <= i) && (i <= length[1]));
+            assert((0 <= j) && (j <= length[0]));
+            return data[i][j];
+        }
+
+    protected:
+        void free() {
+             if (data != nullptr)
+                 for (int i = 0; i < length[1]; i++)
+                     delete[] data[i];
+             delete[] data;
+        }
+        
+        void allocate() {
+            data = new T*[length[1]];
+            for (int i = 0; i < length[1]; i++)
+                data[i] = new T[length[0]]();
+        }
+
+        void copy(T** v) {
+            if (!v) return;
+            int rowlen = length[0] * sizeof(T);
+            for (int i = 0; i < length[1]; i++) {
+                memcpy(data[i], v[i], rowlen);
+            }
+        }
+
+    };
 
 }
-
 #endif

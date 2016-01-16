@@ -31,7 +31,7 @@ namespace MyMath{
         virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{
             // calculate params
             Vec3d l = center - ray.getSource();
-            real_t lSqr = l.L2Norm_Sqr();
+            real_t lSqr = l.getNormSqr();
             real_t rSqr = getSqr(radius);
             real_t tp = Vec3d::dot( ray.getDirection(), l );
             // check whether is inside
