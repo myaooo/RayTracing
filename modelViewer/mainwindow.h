@@ -32,6 +32,7 @@
 #include "../RayTracing/geometry.h"
 #include "../RayTracing/color.h"
 #include "../RayTracing/util.h"
+#include "../RayTracing/raytracer.h"
 
 using namespace std;
 

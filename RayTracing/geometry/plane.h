@@ -48,20 +48,26 @@ namespace MyMath{
         }
 
         virtual bool isIntersect(const Ray & ray) const override{
-            if (DOT(ray.getDirection(),norm) < Epsilon) {
-                return false;
-            }
-            return true;
+            real_t pos;
+            testIntersect(pos, ray);
+            return (pos > 0) && (pos < ray.range);
         }
+
         virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{
-            if (!this->isIntersect(ray)) {
-                intersectPos = InfDistance;
+            real_t dot = testIntersect(intersectPos, ray);
+            if (intersectPos <= 0 || Intersectpos >= ray.range) {
                 return MISSED;
             }
+            return dot < 0 ? INTERSECTED : INSIDE;
+        }
+
+    protected:
+        real_t testIntersect(real_t & intersectPos, const Ray & ray) const {
             Vec3d source = ray.getSource();
             Vec3d direction = ray.getDirection();
-            intersectPos = -(this->d+DOT(norm,source))/(DOT(norm,direction));
-            return intersectPos < 0 ? INSIDE : INTERSECTED;
+            real_t dot = DOT(norm,direction);
+            intersectPos = -(this->d+DOT(norm,source))/(dot);
+            return dot;
         }
     };
 #undef DOT

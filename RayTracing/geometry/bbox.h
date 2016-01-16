@@ -32,8 +32,8 @@ namespace MyMath{
         BBox(const Vec3d & _min, const Vec3d & _max) : minVec(_min), maxVec(_max){}
 		// Default initialization
 		inline void Init(){
-            minVec = Vec3d::maxVec();
-            maxVec = -Vec3d::maxVec();
+            minVec = Vec3d::maxVec;
+            maxVec = Vec3d::minVec;
 		}
 		// Find the dimension that have the max length
 		inline int getMaxDimension(){
@@ -111,7 +111,7 @@ namespace MyMath{
                 tmax = tzmax;
             _hotTMin = tmin;
             _hotTMax = tmax;
-            return ( (tmin < r.t1) && (tmax > 0) );
+            return ( (tmin < r.range) && (tmax > 0) );
         }
 
         virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{

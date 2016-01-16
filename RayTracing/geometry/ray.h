@@ -19,16 +19,18 @@ namespace MyMath{
     public:
         Vec3d inv_direction;
         bool sign[3];
-        real_t t1;
+        real_t range;
     public:
-        Ray(const Vec3d & s, const Vec3d & d) : source(s), direction(d){
+        Ray(){}
+        Ray(const Vec3d & s, const Vec3d & d, real_t dist = MAXRAYLENGTH) :
+            source(s), direction(d), range(dist){
             direction.normalize();
             inv_direction = Vec3d(1/d.x, 1/d.y, 1/d.z);
             for (size_t i = 0; i < 3; i++) {
                 sign[i] = (inv_direction[i] < 0);
             }
-            t1 = MAXRAYLENGTH;
         };
+
         Vec3d getPoint(real_t ratio) const{
             return Vec3d(source + direction * ratio);
         }
@@ -41,12 +43,15 @@ namespace MyMath{
         const Vec3d & getSource() const {
             return source;
         }
+        // get Direction
         const Vec3d & getDirection() const{
             return direction;
         }
+        // set Source
         void setSource(const Vec3d & s){
             source = s;
         }
+        // set Direction
         void setDirection(const Vec3d & d){
             direction = d;
             direction.normalize();
@@ -55,8 +60,10 @@ namespace MyMath{
                 sign[i] = (inv_direction[i] < 0);
             }
         }
-        void normalizeDirection(){
-            direction.normalize();
+        // set the range of the ray (max length)
+        void setRange(real_t r){
+            assert(r>0);
+            range = r;
         }
     };
 }

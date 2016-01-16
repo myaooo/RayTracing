@@ -27,15 +27,18 @@ namespace RayTracing{
             Renderable(_texture), plane(a,b,c,d){}
         // Methods
         // input a ray, and get the intersection info
-        virtual IntersectInfo getIntersect(const Ray & ray) const override{
+        virtual IntersectInfoPtr getIntersect(const Ray & ray) const override{
             real_t pos;
             IntersectType intersectType = plane.intersect(pos,ray);
-            Vec3d intersectPoint = ray.getPoint(pos);
-            return IntersectInfo(make_shared<RPlane>(*this),ray,intersectPoint,plane.norm,intersectType);
+            if (intersectType == MISSED) {
+                return nullptr;
+            }
+            IntersectInfo info(make_shared<RPlane>(*this), ray, pos, plane.norm, intersectType);
+            return make_shared<IntersectInfo>(info);
         }
 
         virtual BBox getBBox() const override{
-            return BBox(Vec3d::minVec(), Vec3d::maxVec());
+            return BBox(Vec3d::minVec, Vec3d::maxVec);
         }
 
 

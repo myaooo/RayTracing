@@ -23,17 +23,16 @@ namespace RayTracing{
     typedef shared_ptr<TextureBase> TexturePtr;
     typedef shared_ptr<Ray> RayPtr;
     typedef shared_ptr<Renderable> RenderablePtr;
+    typedef shared_ptr<IntersectInfo> IntersectInfoPtr;
 
     // base class of all renderable objects
     class Renderable {
     private:
-        TexturePtr texture = nullptr;
+        TexturePtr texture;
     public:
         virtual ~Renderable(){};
 
-        Renderable(){}
-
-        Renderable(const TexturePtr & _texture) : texture(_texture) {}
+        Renderable(const TexturePtr & _texture = nullptr) : texture(_texture) {}
 
         // set the texture of the objects to a new texture
         void setTexture(const TexturePtr & _texture){
@@ -46,7 +45,7 @@ namespace RayTracing{
         }
 
         // input a ray, and get the intersection info
-        virtual IntersectInfo getIntersect(const Ray & ray) const = 0;
+        virtual IntersectInfoPtr getIntersect(const Ray & ray) const = 0;
 
         virtual BBox getBBox() const = 0;
     };
@@ -54,19 +53,19 @@ namespace RayTracing{
     // base class that stores intersection information
     struct IntersectInfo{
     public:
-        RenderablePtr renderablePtr; // a pointer to the renderable object
-        const Ray & inRay; // in ray
-        Vec3d intersectPoint; // intersect point
-        Vec3d norm; // the norm vector of the surface
-        IntersectType intersectType; // intersect type
-        MaterialPtr materialPtr; //  a pointer to the material
-        real_t cosi; // the cos value between -inray direction and norm
+        RenderablePtr renderablePtr = nullptr; // a pointer to the renderable object
+        Ray inRay; // in ray
+        real_t intersectPos = InfDistance;
+        Vec3d norm = Vec3d::zeroVec; // the norm vector of the surface
+        IntersectType intersectType = MISSED; // intersect type
+        MaterialPtr materialPtr = nullptr; //  a pointer to the material
+        real_t cosi = 0; // the cos value between -inray direction and norm
     public:
         // constructor
-        //IntersectInfo(){}
+        IntersectInfo(){}
         IntersectInfo(const RenderablePtr & rptr, const Ray & inr,
-            const Vec3d & intp, const Vec3d & n, const IntersectType & inttype) :
-            renderablePtr(rptr), inRay(inr), intersectPoint(intp),
+            real_t pos, const Vec3d & n, const IntersectType & inttype) :
+            renderablePtr(rptr), inRay(inr), intersectPos(pos),
             norm(n), intersectType(inttype) {
 
                 materialPtr = renderablePtr->getTexture()->getMaterial();
@@ -76,7 +75,7 @@ namespace RayTracing{
         // get the reflective ray
         Ray getReflectRay(){
             Vec3d reflectDirect = inRay.getDirection() + norm * 2 * cosi;
-            return Ray(intersectPoint, reflectDirect);
+            return Ray(inRay.getPoint(intersectPos), reflectDirect);
         }
 
         // get the refractive ray
@@ -88,7 +87,11 @@ namespace RayTracing{
             real_t cost = sqrt(1 - getSqr(refractivity) * (1 - getSqr(cosi)));
             Vec3d refractDirect = inRay.getDirection() * refractivity
                 + norm * (cost - refractivity * cosi);
-            return Ray(intersectPoint, refractDirect);
+            return Ray(inRay.getPoint(intersectPos), refractDirect);
+        }
+        // get Intersect Point
+        Vec3d getIntersectPoint(){
+            return inRay.getIntersectPoint(intersectPos);
         }
     };
 }

@@ -82,9 +82,9 @@ namespace MyMath{
         // get the cross product of vec3d a and vec3d b
         static inline Vec3d cross(const Vec3d & a, const Vec3d & b);
         static inline real_t dot(const Vec3d & a, const Vec3d & b);
-        static inline Vec3d maxVec();
-        static inline Vec3d minVec();
-        static inline Vec3d zeroVec();
+        //static inline Vec3d maxVec();
+        //static inline Vec3d minVec();
+        //static inline Vec3d zeroVec();
         bool operator == (const Vec3d & a){
             return (isEqual(this->x,a.x) && isEqual(this->y, a.y) && isEqual(this->z,a.z));
         }
@@ -105,6 +105,7 @@ namespace MyMath{
         };
         enum {_len = 3};
 
+        static const Vec3d maxVec, minVec, zeroVec;
     }; // end of vec3d
 
     inline Vec3d Vec3d::cross(const Vec3d & a, const Vec3d & b){
@@ -113,16 +114,6 @@ namespace MyMath{
 
     inline real_t Vec3d::dot(const Vec3d & a, const Vec3d & b){
         return a.x*b.x + a.y*b.y + a.z*b.z;
-    }
-
-    inline Vec3d Vec3d::maxVec(){
-        return Vec3d(DBL_MAX,DBL_MAX,DBL_MAX);
-    }
-    inline Vec3d Vec3d::minVec(){
-        return -Vec3d(DBL_MAX,DBL_MAX,DBL_MAX);
-    }
-    inline Vec3d Vec3d::zeroVec(){
-        return Vec3d(0,0,0);
     }
 
 }

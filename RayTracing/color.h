@@ -76,8 +76,16 @@ public:
         return *this * (1.0 / p);
     }
 
-   friend std::ostream & operator << (std::ostream &os, const Color& vec)
-   { return os << vec.r << " " << vec.g << " " << vec.b;}
+    Color normalize(){
+        real_t maxi = getMax(r,getMax(g,b));
+        this->Vec3d::operator /= (maxi);
+        return *this;
+    }
+
+
+
+   friend std::ostream & operator << (std::ostream &os, const Color& c)
+   { return os << c.r << " " << c.g << " " << c.b;}
 
    static const Color WHITE, BLACK, RED, BLUE, GREEN, YELLOW, MAGNETA, CYAN;
 

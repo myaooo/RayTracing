@@ -11,5 +11,6 @@
 #include "geometry/plane.h"
 #include "geometry/bbox.h"
 #include "geometry/ray.h"
+#include "geometry/sphere.h"
 
 #endif

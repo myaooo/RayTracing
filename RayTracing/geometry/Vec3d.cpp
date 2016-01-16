@@ -154,17 +154,21 @@ namespace MyMath{
     void Vec3d::normalize()
     {
         real_t fSqr = getNorm();
-        if(fSqr>1e-6)
+        if(fSqr>Epsilon)
             (*this) *= 1.0f/fSqr;
     }
 
-    real_t Vec3d::L2Norm_Sqr() const
+    real_t Vec3d::getNormSqr() const
     {
         return _p[0]*_p[0] + _p[1]*_p[1] + _p[2]*_p[2];
     }
 
     real_t Vec3d::getNorm() const{
-        return sqrt(this->L2Norm_Sqr());
+        return sqrt(this->getNormSqr());
     }
+
+    const Vec3d Vec3d::maxVec(DBL_MAX,DBL_MAX,DBL_MAX),
+                Vec3d::minVec(-DBL_MAX,-DBL_MAX,-DBL_MAX),
+                Vec3d::zeroVec(0,0,0);
 
 } // end of namespace MyMath
