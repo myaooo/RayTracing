@@ -48,6 +48,8 @@ namespace RayTracing{
         virtual IntersectInfoPtr getIntersect(const Ray & ray) const = 0;
 
         virtual BBox getBBox() const = 0;
+
+        virtual bool isinfinite() const { return false; }
     };
 
     // base class that stores intersection information
@@ -67,7 +69,6 @@ namespace RayTracing{
             real_t pos, const Vec3d & n, const IntersectType & inttype) :
             renderablePtr(rptr), inRay(inr), intersectPos(pos),
             norm(n), intersectType(inttype) {
-
                 materialPtr = renderablePtr->getTexture()->getMaterial();
                 cosi = -Vec3d::dot(inRay.getDirection(),norm);
             }
@@ -94,16 +95,16 @@ namespace RayTracing{
             return ray;
         }
         // get Intersect Point
-        Vec3d getIntersectPoint(){
+        Vec3d getIntersectPoint() const{
             return inRay.getPoint(intersectPos);
         }
 
         bool isReflectable() {
-            return materialPtr->specular.getNormSqr() < Epsilon;
+            return materialPtr->specular.getNormSqr() > Epsilon;
         }
 
         bool isRefractable() {
-            return materialPtr->refract.getNormSqr() < Epsilon;
+            return materialPtr->refract.getNormSqr() > Epsilon;
         }
     };
 }

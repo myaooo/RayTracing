@@ -1,58 +1,38 @@
 #pragma once
 #include "../geometry.h"
 #include <vector>
-
+#include <array>
+#include "meshObject.h"
 namespace RayTracing
 {
     using namespace MyMath;
-	// A definition of array
-	// Later used to store triangle list
-    template <typename T, int N> class Array 
-    {
-    public:
-        enum {_len = N};
-        typedef T t_Val; 
-    public:
-        T& operator[] (int i)
-        {
-            assert(i>=0&&i<N);
-            return _p[i];
-        }
-        const T& operator[] (int i) const 
-        {
-            assert(i>=0&&i<N);
-            return _p[i];
-        }
-
-    protected:
-        T _p[N];
-    }; // end of class Array
-	
 
     class CSimpleObject
     {
     public:
-		typedef Array<int, 3> Triangleidx;
+		typedef array<int, 3> TriangleIdx;
         CSimpleObject(void);
         ~CSimpleObject(void);
         
     public:
-        bool IsLoaded() { return m_pVertexList!=NULL;}
+        bool IsLoaded() { return !m_pVertexList.empty();}
 
         void Destroy();
         bool LoadFromObj(const char* fn);
         bool SaveToObj(const char* fn);
+        static bool LoadFromObj(Mesh & m, const char* fn);
+        static bool saveObj(Mesh & m, const char* fn);
         
     protected:
         bool Parse(FILE* fp);
-        bool CheckParse(int nVertices,std::vector<Array<int,3> > & vecTriangles);
+        bool CheckParse(int nVertices,std::vector<TriangleIdx> & vecTriangles);
 
     protected:
 
         int             m_nVertices;
         int             m_nTriangles;
-        Vec3d*          m_pVertexList;
-        Triangleidx*	m_pTriangleList;
+        vector<Vec3d> m_pVertexList;
+        vector<TriangleIdx>	m_pTriangleList;
     };
 
 }

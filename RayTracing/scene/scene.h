@@ -14,9 +14,13 @@
 #include "renderable.h"
 #include "rplane.h"
 #include "light.h"
+#include "kdtree.h"
+#include "rtriangle.h"
+#include "rcube.h"
+#include "meshObject.h"
 
 namespace RayTracing{
-	#define ENVIRONMENT_FACTOR 0.005
+	#define ENVIRONMENT_FACTOR 0.006
     class Scene{
     public:
         // Type definition
@@ -25,10 +29,13 @@ namespace RayTracing{
         // data field
         ObjectList objects;
         LightList lights;
-        bool enableTree = false;
-        bool configed = false;
+        //KdTree kdTree;
+        bool hasTree;
+        bool enableTree;
+        bool configed;
         Color ambient = Color::BLACK;
     public:
+        Scene() : hasTree(false), configed(false),enableTree(false) {}
         // de-constructor
         ~Scene(){
             objects.clear();
@@ -49,14 +56,19 @@ namespace RayTracing{
 
         IntersectInfoPtr getObjectIntersect(const Ray & ray) const;
 
+        IntersectInfoPtr getKdTreeIntersect(const Ray & ray) const;
+
         IntersectInfoPtr getLightIntersect(const Ray & ray) const;
 
         bool hasObjectIntersect(const Ray & ray) const;
+
         bool hasLightIntersect(const Ray & ray) const;
 
         bool buildTree();
 
         void config();
+
+        
     };
 }
 

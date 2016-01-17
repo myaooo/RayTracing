@@ -15,10 +15,10 @@
 #include <cmath>
 
 namespace RayTracing{
-    #define DEFAULT_MAX_DEPTH 40
+    #define DEFAULT_TRACE_DEPTH 15
     #define DISSIPATION 0.03
     #define getDissipator(dist) (exp(-(dist)*DISSIPATION))
-    typedef Scene * ScenePtr;
+    typedef std::shared_ptr<Scene> ScenePtr;
     class RayTracer{
     public:
         // data fields
@@ -30,7 +30,7 @@ namespace RayTracing{
     public:
         RayTracer(){}
         RayTracer(const Camera & c,  const ScenePtr & s = NULL,
-            int depth = DEFAULT_MAX_DEPTH, const Color & back = Color::BLACK) :
+            int depth = DEFAULT_TRACE_DEPTH, const Color & back = Color::BLACK) :
             cam(c), scenePtr(s), maxTraceDepth(depth), BGColor(back){}
         void setCamera(const Camera & c){
             cam = c;

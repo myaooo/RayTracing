@@ -25,7 +25,7 @@ namespace MyMath{
         Ray(const Vec3d & s, const Vec3d & d, real_t dist = MAXRAYLENGTH) :
             source(s), direction(d), range(dist){
             direction.normalize();
-            inv_direction = Vec3d(1/d.x, 1/d.y, 1/d.z);
+            inv_direction = Vec3d(1/direction.x, 1/direction.y, 1/direction.z);
             for (size_t i = 0; i < 3; i++) {
                 sign[i] = (inv_direction[i] < 0);
             }
@@ -55,7 +55,7 @@ namespace MyMath{
         void setDirection(const Vec3d & d){
             direction = d;
             direction.normalize();
-            inv_direction = Vec3d(1/d.x, 1/d.y, 1/d.z);
+            inv_direction = Vec3d(1/direction.x, 1/direction.y, 1/direction.z);
             for (size_t i = 0; i < 3; i++) {
                 sign[i] = (inv_direction[i] < 0);
             }

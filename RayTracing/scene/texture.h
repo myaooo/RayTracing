@@ -40,6 +40,29 @@ namespace RayTracing{
         }
     };
 
+    class GridTexture : public TextureBase {
+    private:
+        int size;
+        const Material &pty1, &pty2;
+    public:
+        GridTexture(const Material& m_pty1, const Material& m_pty2, int _size) :
+            size(_size), pty1(m_pty1), pty2(m_pty2) {}
+
+        MaterialPtr getMaterial(real_t x, real_t y) const override {
+            bool a1 = (((int)x / size) & 1) == 0;
+            if (x < 0) a1 = !a1;
+            bool a2 = (((int)y / size) & 1) == 0;
+            if (y < 0) a2 = !a2;
+            if (a1 ^ a2) return make_shared<Material>(pty1);
+            else return make_shared<Material>(pty2);
+        }
+
+        MaterialPtr getMaterial() const override {
+            return nullptr;
+        }
+
+        static const GridTexture BLACK_WHITE_MIRROR, BLACK_WHITE;
+    };
 }
 
 #endif // !TEXTURE_H

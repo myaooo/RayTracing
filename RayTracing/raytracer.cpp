@@ -18,7 +18,9 @@ namespace RayTracing{
     }
 
     Color RayTracer::doTrace(const Ray & ray) const{
-        return traceRay(ray, 0);
+        Color c= traceRay(ray, 0);
+        c.normalizeColor();
+        return c;
     }
     // Phong reflection model
     // https://en.wikipedia.org/wiki/Phong_reflection_model
@@ -27,6 +29,7 @@ namespace RayTracing{
             return BGColor;
         Color cLocal, cReflect = Color::BLACK, cRefract = Color::BLACK;
         IntersectInfoPtr infoPtr = getIntersectInfo(ray);
+        if (infoPtr == nullptr) return BGColor;
         // local phong color : diffuse + specular +ambient
         cLocal = getLocalPhong(infoPtr);
         if (!(infoPtr->intersectType == INSIDE) && infoPtr->isReflectable())
@@ -38,7 +41,7 @@ namespace RayTracing{
             cReflect *= (localDiffuse + localSpecular);
         }
         if (infoPtr->isRefractable()) {
-            cRefract = traceRay(infoPtr->getReflectRay(), depth + 1);
+            cRefract = traceRay(infoPtr->getRefractRay(), depth + 1);
             cRefract *= infoPtr->materialPtr->refract;
         }
 

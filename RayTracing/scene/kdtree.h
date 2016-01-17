@@ -16,6 +16,8 @@ namespace RayTracing {
 #define DEFAULT_TREE_DEPTH 100
 #define DEFAULT_NODE_SIZE 20
     using namespace std;
+    class KdTree;
+    typedef shared_ptr<KdTree> KdTreePtr;
     class KdTree : public Renderable {
     public:
         // inner struct Node
@@ -43,6 +45,8 @@ namespace RayTracing {
             }
 
             void addObject(const RenderablePtr& obj) {
+                if (objects == nullptr)
+                    objects = new list<RenderablePtr>();
                 objects->push_back(obj);
             }
 
@@ -71,8 +75,8 @@ namespace RayTracing {
 
     public:
         // constructor
-        KdTree(const list<RenderablePtr>& objs, const BBox& space,
-            unsigned d = DEFAULT_TREE_DEPTH, unsigned m = DEFAULT_NODE_SIZE);
+        KdTree(const list<RenderablePtr>& objs, unsigned d = DEFAULT_TREE_DEPTH, 
+            unsigned m = DEFAULT_NODE_SIZE);
         // destructor
         ~KdTree();
         // override getIntersect function

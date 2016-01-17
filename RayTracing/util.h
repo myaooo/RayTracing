@@ -21,7 +21,7 @@
 #define COLOR_RESET   "\x1b[0m"
 
 #define PI 3.1415926f
-#define Epsilon 1e-6f
+#define Epsilon 1e-6
 #define Inf DBL_MAX
 #define InfDistance 1e10
 #define FloatPrecision 1024

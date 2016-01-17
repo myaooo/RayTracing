@@ -76,9 +76,10 @@ public:
         return *this * (1.0 / p);
     }
 
-    Color normalize(){
+    Color normalizeColor(){
         real_t maxi = getMax(r,getMax(g,b));
-        this->Vec3d::operator /= (maxi);
+        if (maxi >= 1)
+            this->Vec3d::operator /= (maxi); 
         return *this;
     }
 

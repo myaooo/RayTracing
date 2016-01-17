@@ -13,5 +13,6 @@
 #include "geometry/bbox.h"
 #include "geometry/ray.h"
 #include "geometry/sphere.h"
+#include "geometry/triangle.h"
 
 #endif

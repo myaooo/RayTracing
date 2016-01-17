@@ -160,13 +160,15 @@
     <ClCompile Include="RayTracing\geometry\matrix.cpp" />
     <ClCompile Include="RayTracing\geometry\Vec3d.cpp" />
     <ClCompile Include="RayTracing\geometry\Vec4d.cpp" />
+    <ClCompile Include="RayTracing\MeshParser.cpp" />
     <ClCompile Include="RayTracing\raytracer.cpp" />
     <ClCompile Include="RayTracing\renderer.cpp" />
     <ClCompile Include="RayTracing\scene\kdtree.cpp" />
     <ClCompile Include="RayTracing\scene\light.cpp" />
     <ClCompile Include="RayTracing\scene\material.cpp" />
+    <ClCompile Include="RayTracing\scene\meshObject.cpp" />
     <ClCompile Include="RayTracing\scene\scene.cpp" />
-    <ClCompile Include="RayTracing\scene\SimpleObject.cpp" />
+    <ClCompile Include="RayTracing\scene\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RayTracing\camera\camera.h" />
@@ -180,18 +182,22 @@
     <ClInclude Include="RayTracing\geometry\plane.h" />
     <ClInclude Include="RayTracing\geometry\ray.h" />
     <ClInclude Include="RayTracing\geometry\sphere.h" />
+    <ClInclude Include="RayTracing\geometry\triangle.h" />
     <ClInclude Include="RayTracing\geometry\Vec3d.h" />
     <ClInclude Include="RayTracing\geometry\Vec4d.h" />
+    <ClInclude Include="RayTracing\MeshParser.h" />
     <ClInclude Include="RayTracing\raytracer.h" />
     <ClInclude Include="RayTracing\renderer.h" />
     <ClInclude Include="RayTracing\scene\kdtree.h" />
     <ClInclude Include="RayTracing\scene\light.h" />
     <ClInclude Include="RayTracing\scene\Material.h" />
+    <ClInclude Include="RayTracing\scene\meshObject.h" />
+    <ClInclude Include="RayTracing\scene\rcube.h" />
     <ClInclude Include="RayTracing\scene\renderable.h" />
     <ClInclude Include="RayTracing\scene\rplane.h" />
     <ClInclude Include="RayTracing\scene\rsphere.h" />
+    <ClInclude Include="RayTracing\scene\rtriangle.h" />
     <ClInclude Include="RayTracing\scene\scene.h" />
-    <ClInclude Include="RayTracing\scene\SimpleObject.h" />
     <ClInclude Include="RayTracing\scene\texture.h" />
     <ClInclude Include="RayTracing\util.h" />
   </ItemGroup>

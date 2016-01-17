@@ -6,33 +6,26 @@ using namespace std;
 
 namespace RayTracing
 {
-    CSimpleObject::CSimpleObject(void)
+    MeshParser::MeshParser(void)
     {
-        m_nVertices = -1;
+        Mesh.vertices = -1;
         m_nTriangles = -1;
-        m_pTriangleList = NULL;
-        m_pVertexList = NULL;
     }
 
-    CSimpleObject::~CSimpleObject(void)
+    MeshParser::~MeshParser(void)
     {
         Destroy();
     }
 
-    void CSimpleObject::Destroy()
+    void MeshParser::Destroy()
     {
-        if(m_pTriangleList)
-            delete []m_pTriangleList;
-        if(m_pVertexList)
-            delete []m_pVertexList;
-
-        m_nVertices = -1;
+        Mesh.vertices = -1;
         m_nTriangles = -1;
-        m_pVertexList = NULL;
-        m_pTriangleList = NULL;
+        m_pVertexList.clear();
+        m_pTriangleList.clear();
     }
 
-    bool CSimpleObject::LoadFromObj(const char* fn)
+    bool MeshParser::LoadFromObj(const char* fn)
     {
         FILE* fp = fopen(fn,"r");
         if(fp==NULL)
@@ -45,7 +38,7 @@ namespace RayTracing
             if(Parse(fp))
             {
                 printf("Loading from %s successfully.\n",fn);
-                printf("Vertex Number = %d\n",m_nVertices);
+                printf("Vertex Number = %d\n",Mesh.vertices);
                 printf("Triangle Number = %d\n",m_nTriangles);
                 fclose(fp);
                 return true;
@@ -58,13 +51,13 @@ namespace RayTracing
         }
     }
 
-    bool CSimpleObject::Parse(FILE* fp)
+    bool MeshParser::Parse(FILE* fp)
     {
         
         char buf[256];
         int nVertices,nTriangles;
         std::vector<Vec3d>          vecVertices;
-        std::vector<Array<int,3> >  vecTriangles;
+        std::vector<TriangleIdx >  vecTriangles;
 
         nVertices = 0;
         nTriangles = 0;
@@ -112,7 +105,7 @@ namespace RayTracing
             case 'f':				/* face */
                 {
                     int v,n,t;
-                    Array<int,3> vIndices;
+                    TriangleIdx vIndices;
                     if(fscanf(fp, "%s", buf)!=1)
                     {
                         printf("Error: Wrong Face at Line %d\n",lineNumber);
@@ -201,12 +194,12 @@ namespace RayTracing
         {
             Destroy();
             
-            m_nVertices = int(vecVertices.size());
+            Mesh.vertices = int(vecVertices.size());
             m_nTriangles = int(vecTriangles.size());
-            m_pVertexList = new Vec3d[m_nVertices];
-            m_pTriangleList = new Array<int,3> [m_nTriangles];
+            m_pVertexList = vector<Vec3d>(Mesh.vertices);
+            m_pTriangleList = vector<TriangleIdx>(m_nTriangles);
 
-            for(int i=0;i<m_nVertices;i++)
+            for(int i=0;i<Mesh.vertices;i++)
                 m_pVertexList[i] = vecVertices[i];
             for(int i=0;i<m_nTriangles;i++)
             {
@@ -220,12 +213,12 @@ namespace RayTracing
             return false;
     }
 
-    bool CSimpleObject::CheckParse(int nVertices,std::vector<Array<int,3> > & vecTriangles)
+    bool MeshParser::CheckParse(int nVertices,std::vector<TriangleIdx > & vecTriangles)
     {
         for(int i=0;i<vecTriangles.size();i++)
         {
-            Array<int,3> & vIndices = vecTriangles[i];
-            for(int j=0;j<vIndices._len;j++)
+            TriangleIdx & vIndices = vecTriangles[i];
+            for(int j=0;j<vIndices.size();j++)
                 if(vIndices[j]<=0||vIndices[j]>nVertices)
                 {
                     printf("Error: The vertex index of Face %d has exceeded vertex number %d\n",i,nVertices);
@@ -236,7 +229,7 @@ namespace RayTracing
         return true;
     }
 
-    bool CSimpleObject::SaveToObj(const char* fn)
+    bool MeshParser::SaveToObj(const char* fn)
     {
         if(!IsLoaded())
         {
@@ -251,9 +244,9 @@ namespace RayTracing
             return false;
         }
 
-        fprintf(fp,"# %d vertices\n",m_nVertices);
-        for(int i=0;i<m_nVertices;i++)
-            fprintf(fp,"v %lf %lf %lf\n",  m_pVertexList[i]._p[0],
+        fprintf(fp,"# %d vertices\n",Mesh.vertices);
+        for(int i=0;i<Mesh.vertices;i++)
+            fprintf(fp,"v %f %f %f\n",  m_pVertexList[i]._p[0],
                                         m_pVertexList[i]._p[1],
                                         m_pVertexList[i]._p[2]);
 

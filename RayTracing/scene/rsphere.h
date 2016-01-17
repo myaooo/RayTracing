@@ -11,11 +11,12 @@
 #include "../geometry.h"
 
 namespace RayTracing{
-    typedef MyMath::Sphere Sphere;
+    using MyMath::Sphere;
     // renderable sphere
     class RSphere : public Renderable{
     public:
         // data field
+        Vec3d axis = Vec3d(0,0,1);
         Sphere sphere;
     public:
         // Constructors
@@ -36,6 +37,7 @@ namespace RayTracing{
             Vec3d norm = ray.getPoint(pos)-sphere.center;
             norm.normalize();
             IntersectInfo info(make_shared<RSphere>(*this),ray,pos,norm,intersectType);
+            getMaterial(info);
             return make_shared<IntersectInfo>(info);
         }
 
@@ -58,6 +60,17 @@ namespace RayTracing{
         void setRadius(real_t r){
             assert(r>0);
             sphere.radius = r;
+        }
+    protected:
+        void RSphere::getMaterial(IntersectInfo & info) const {
+            //assert(fabs(sphere.axis.sqr() - 1) < EPS);
+            Vec3d norm = info.norm;
+            Vec3d projxy = Vec3d(norm.x, norm.y, 0),
+                projyz = Vec3d(0, norm.y, norm.z);
+            real_t arg1 = acos(Vec3d::dot(projxy,axis)),		// 0 to pi
+                arg2 = acos(Vec3d::dot(projyz,axis));
+            info.materialPtr = this->getTexture()->getMaterial(arg1 * sphere.radius, arg2 * sphere.radius);
+            return;
         }
 
     };

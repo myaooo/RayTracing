@@ -43,12 +43,12 @@ namespace RayTracing{
             std::cerr<<"Should not call this function @Light, getBBox.\n"<<std::endl;
             return BBox();
         }
+        virtual ~Light(){
+            Renderable::~Renderable();
+        }
 
         // generate a ray targeting to the sourcePoint
-        virtual Ray genRay(const Vec3d & sourcePoint) const {
-            std::cerr << "Should not call this function @Light, genRay.\n" << std::endl;
-            return Ray();
-        }
+        virtual Ray genRay(const Vec3d & sourcePoint) const = 0;
 
         void setColor(const Color & s);
         void setIntensity(real_t sS);
@@ -65,11 +65,16 @@ namespace RayTracing{
         // constructor
         SphereLight(const Sphere & s, const Light & light) :
             Light(light), RSphere(s){}
-
+        SphereLight(const Sphere & s, const Color & c, real_t i) :
+            Light(c,i), RSphere(s) {}
         // Methods
         virtual IntersectInfoPtr getIntersect(const Ray & ray) const override;
         virtual BBox getBBox() const override;
         virtual Ray genRay(const Vec3d & source) const override;
+        virtual ~SphereLight() {
+            Light::~Light();
+            RSphere::~RSphere();
+        }
 
     };
 

@@ -69,25 +69,25 @@ namespace RayTracing {
         return nullptr;
     }
 
-    KdTree::KdTree(const list<RenderablePtr>& _objects, const BBox& space,
-        unsigned d, unsigned m) {
+    KdTree::KdTree(const list<RenderablePtr>& _objects, unsigned d, unsigned m) {
         maxDepth = d;
         maxSize = m;
         list<RenderableNode*> objectList;
         for (auto & obj : _objects) {
-            //assert(!obj->infinity());
             BBox box = obj->getBBox();
             objectList.emplace_back(new RenderableNode(obj, box));
             boundBox.unite(box);
         }
         Clock c = Clock();
-        root = build(objectList, space, 0);
+        root = build(objectList, boundBox, 0);
         for (auto objptr : objectList)
             delete objptr;
         printf("Build tree spends %f seconds\n", c.getTime());
     }
 
-    KdTree::~KdTree() { delete root; }
+    KdTree::~KdTree() { 
+        delete root; 
+    }
 
     IntersectInfoPtr KdTree::getIntersect(const Ray& ray) const {
         if (!root) return nullptr;		// empty kd-tree
@@ -112,113 +112,11 @@ namespace RayTracing {
     }
 
     KdTree::Node* KdTree::build(const list<RenderableNode*>& objs, const BBox& box, int depth) {
-        if (objs.size() == 0 || depth > maxDepth) return nullptr;
-
-        Node* newNode = new Node(box);
-
-        int nobj = objs.size();
-        if (nobj <= maxSize) {
-            for (auto objptr : objs) newNode->addObject(objptr->object);
-            return newNode;
+        if (enableSAH)
+        {
+            return SAHBuild(objs, box, depth);
         }
-        SuperPlane best_pl;
-        real_t minCost = DBL_MAX;
-
-        // algorithm 2 (SAH kdtree)
-        // "On building fast kd-trees for ray tracing, and on doing that in O (N log N)"
-        // Wald, Ingo and Havran, Vlastimil
-        // O(n log^2(n)) build
-
-        typedef pair<real_t, bool> PDB;
-        auto gen_cand_list = [&objs](int dim) {
-            vector<PDB> cand_list;
-            for (auto objptr : objs)
-                cand_list.emplace_back(objptr->box.minVec[dim] - Epsilon, true),
-                cand_list.emplace_back(objptr->box.maxVec[dim] + Epsilon, false);
-            sort(cand_list.begin(), cand_list.end());
-            return cand_list;
-        };
-
-        future<vector<PDB>> task[3];
-        const int THREAD_DEPTH_THRES = 1;
-        bool parallel = depth < THREAD_DEPTH_THRES;
-        if (parallel)
-            for (int dim = 0; dim < 3; ++dim)
-                task[dim] = async(launch::async, bind(gen_cand_list, dim));
-
-        for (int dim = 0; dim < 3; ++dim) {
-            // true: min, false: max
-            vector<PDB> cand_list =
-                parallel ? task[dim].get() : gen_cand_list(dim);
-
-            int lcnt = 0, rcnt = nobj;
-            auto ptr = cand_list.begin();
-
-            do {
-                SuperPlane pl(dim, ptr->first);
-                try {
-                    BBox a, b;
-                    box.split(a,b,pl);
-                    real_t cost = a.surfaceArea() * lcnt + b.surfaceArea() * rcnt;
-                    if (lcnt == 0 || rcnt == 0  || (lcnt + rcnt == nobj - 1 && rcnt == 1))
-                        cost *= 0.8;		// this is a hack
-                    if (cost < minCost) {
-                        minCost = cost;
-                        best_pl = pl;
-                    }
-                }
-                catch (...) {}
-
-                if (ptr->second) lcnt++; else rcnt--;
-
-                auto old = ptr++;
-                while (ptr != cand_list.end() && ptr->first - old->first < Epsilon) {
-                    if (ptr->second) lcnt++;
-                    else rcnt--;
-                    old = ptr++;
-                }
-            } while (ptr != cand_list.end());
-        }
-
-        if (best_pl.axis == SuperPlane::ERROR) { // didn't find best_pl
-            for (auto objptr : objs) newNode->addObject(objptr->object);
-            return newNode;
-        }
-
-        BBox boxa, boxb;
-        // fount the best cutting plane
-        newNode->plane = best_pl;
-        box.split(boxa, boxb,best_pl);
-        list<RenderableNode*> objl, objr;
-        for (auto obj : objs) {
-            if (obj->box.maxVec[best_pl.axis] >= best_pl.position) objr.push_back(obj);
-            if (obj->box.minVec[best_pl.axis] <= best_pl.position) objl.push_back(obj);
-        }
-        // end of algorithm 2
-
-        if (parallel) { // parallel when depth is small
-            future<Node*> lch_future = async(launch::async,
-                [&]() {
-                return build(objl, boxa, depth + 1);
-            });
-            future<Node*> rch_future = async(launch::async,
-                [&]() {
-                return build(objr, boxb, depth + 1);
-            });
-
-            newNode->leftChild = lch_future.get();
-            newNode->rightChild = rch_future.get();
-        }
-        else {
-            newNode->leftChild = build(objl, boxa, depth + 1);
-            newNode->rightChild = build(objr, boxb, depth + 1);
-        }
-
-        // might fail to build children
-        if (newNode->isLeaf())		// add obj to isLeaf node
-            for (auto objptr : objs) newNode->addObject(objptr->object);
-
-        return newNode;
+        return simpleBuild(objs, box, depth);
     }
 
 
@@ -229,7 +127,7 @@ namespace RayTracing {
 
         int nobj = objs.size();
         if (nobj <= maxSize) {
-            for (auto objptr : objs) newNode->addObject(objptr->object);
+            for (const auto & objptr : objs) newNode->addObject(objptr->object);
             return newNode;
         }
         SuperPlane best_pl;
@@ -254,8 +152,8 @@ namespace RayTracing {
                 objl.push_back(obj);
         }
 
-        newNode->leftChild = build(objl, boxa, depth + 1);
-        newNode->rightChild = build(objr, boxb, depth + 1);
+        newNode->leftChild = simpleBuild(objl, boxa, depth + 1);
+        newNode->rightChild = simpleBuild(objr, boxb, depth + 1);
         // might fail to build children
         if (newNode->isLeaf())		// add obj to isLeaf node
             for (auto objptr : objs) newNode->addObject(objptr->object);
@@ -347,8 +245,8 @@ namespace RayTracing {
         }
         // end of algorithm 2
         
-        newNode->leftChild = build(objl, boxa, depth + 1);
-        newNode->rightChild = build(objr, boxb, depth + 1);
+        newNode->leftChild = SAHBuild(objl, boxa, depth + 1);
+        newNode->rightChild = SAHBuild(objr, boxb, depth + 1);
         // might fail to build children
         if (newNode->isLeaf())		// add obj to isLeaf node
             for (auto objptr : objs) newNode->addObject(objptr->object);

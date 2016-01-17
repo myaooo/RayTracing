@@ -9,10 +9,11 @@
 #include "util.h"
 
 namespace RayTracing {
-    //using namespace cv;
+    using namespace cv;
     typedef MyMath::Vec3d Vec3d;
 
-    Renderer::Renderer(int w, int h, const Camera & c) : width(w), height(h), camera(c) {
+    Renderer::Renderer(int w, int h, const Camera & c) : 
+        width(w), height(h), camera(c) {
         init();
     }
 
@@ -21,15 +22,21 @@ namespace RayTracing {
     }
 
     Renderer::~Renderer() {
+        tracer.~RayTracer();
+        scene->~Scene();
     }
 
-    void Renderer::saveImage(string filename){
-        //imwrite(filename, imageBuffer);
+    void Renderer::saveImage(string filename) const{
+        imwrite(filename, imageBuffer);
     }
 
-    void Renderer::init() {
-        tracer = RayTracer(camera, &scene);
-        imageBuffer = Matrix<Color>(width, height);
+    void Renderer::init() { 
+        if (scene ==nullptr)
+        {
+            scene = shared_ptr<Scene>(new Scene());
+        }
+        tracer = RayTracer(camera, scene);
+        imageBuffer = Mat(width, height, CV_8UC3, Scalar(0, 0, 0));
         centerX = width / 2;
         centerY = height / 2;
     }
@@ -52,31 +59,40 @@ namespace RayTracing {
         return pixel;
     }
 
-    void Renderer::addLight(const Light & light) {
-        scene.addLight(std::make_shared<Light>(light));
+    void Renderer::addLight(const LightPtr & light) {
+        this->scene->addLight(light);
     }
     void Renderer::addObject(const RenderablePtr & renderable) {
-        scene.addObject(renderable);
+        this->scene->addObject(renderable);
     }
 
     real_t Renderer::renderAll() {
+        Clock c = Clock();
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height;j++)
             {
-                imageBuffer(i, j) = tracer.doTrace((double)(i - centerX) / centerX, (double)(j - centerY) / centerY);
+                Color c = tracer.doTrace((double)(i - centerX) / centerX, (double)(j - centerY) / centerY);
+                write(c, i, j);
             }
         }
+        return c.getTime();
     }
 
-    void normalizeColor() {
-
+    void Renderer::showImage() const {
+        imshow("renderer", imageBuffer);
+        waitKey(0);
     }
 
-    void Renderer::write(const Color & c, int x, int y) {
+    void Renderer::write(const Color & c, int x, int y) const{
         imageBuffer.ptr<uchar>(y)[x * 3] = c.b * 255;
         imageBuffer.ptr<uchar>(y)[x * 3 + 1] = c.g * 255;
         imageBuffer.ptr<uchar>(y)[x * 3 + 2] = c.r * 255;
     }
+
+//     void Renderer::buildTree(bool tree) {
+//         this->scene->enableTree = tree;
+//         this->scene->buildTree();
+//     }
 
 }// end of namespace RayTracing

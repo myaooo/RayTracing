@@ -10,7 +10,9 @@
 
 #include "intersectable.h"
 #include "Vec3d.h"
+#include "triangle.h"
 #include "../util.h"
+
 namespace MyMath{
     // SuperPlane is a class that define a geometry super plane, or axis aligned plane
     class SuperPlane {
@@ -22,7 +24,6 @@ namespace MyMath{
         //SuperPlane() : axis(ERROR) {}
         SuperPlane(int a = -1, real_t pos = 0) : axis(static_cast<Axis>(a)), position(pos){}
     };
-
 
     // BBox is a class that define a geometry concept box, or bounding box.
     // The box is aligned with the world coordinate
@@ -145,7 +146,7 @@ namespace MyMath{
         }
 
         virtual IntersectType intersect(real_t & intersectPos, const Ray & ray) const override{
-            if (isIntersect(ray)) {
+            if (!isIntersect(ray)) {
                 intersectPos = InfDistance;
                 return MISSED;
             }
