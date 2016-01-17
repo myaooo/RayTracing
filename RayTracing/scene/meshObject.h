@@ -12,8 +12,8 @@
 #include "kdtree.h"
 #include "texture.h"
 
+class MeshSimplifier;
 namespace RayTracing {
-    class MeshSimplifier;
     
     class Mesh : public Renderable {
         typedef MyMath::Vec3d Vertex;
@@ -66,9 +66,9 @@ namespace RayTracing {
 
         void transform(const Vec3d & offset, real_t scale);
 
-        void finish();
+        void config();
 
-        void simplify(real_t ratio);
+        //void simplify(real_t ratio);
 
         void clear() {
             vertices.clear();
@@ -85,18 +85,16 @@ namespace RayTracing {
         }
 
     protected:
-        void addTriangle(int a, int b, int c) {
-            assert(isValid(std::max(a, std::max(b, c))));
-            RTriangle f(vertices, a, b, c);
-            f.owner = this;
-            faces.push_back(make_shared<RTriangle>(f));
-        }
+        void addTriangle(int a, int b, int c);
     };
 
     struct NormSum {
-        Vec3d sum = Vec3d(0, 0, 0);
-        int cnt = 0;
-        void add(const Vec3d& v) { sum = sum + v, cnt++; }
+        Vec3d sum = Vec3d::zeroVec;
+        int count = 0;
+        void add(const Vec3d& v) {
+            sum = sum + v; 
+            count++; 
+        }
     };
 }
 #endif

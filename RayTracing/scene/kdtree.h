@@ -14,7 +14,7 @@
 
 namespace RayTracing {
 #define DEFAULT_TREE_DEPTH 100
-#define DEFAULT_NODE_SIZE 20
+#define DEFAULT_NODE_SIZE 10
     using namespace std;
     class KdTree;
     typedef shared_ptr<KdTree> KdTreePtr;
@@ -70,7 +70,7 @@ namespace RayTracing {
         BBox boundBox;
         unsigned maxDepth;
         unsigned maxSize;
-        bool enableSAH;
+        bool enableSAH = true;
         //Vec3d bound_min = Vec3d::maxVec, bound_max = -Vec3d::maxVec;
 
     public:

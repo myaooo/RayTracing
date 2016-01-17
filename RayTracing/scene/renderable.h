@@ -40,7 +40,7 @@ namespace RayTracing{
         }
 
         // get the texture of the rederable object as a constant
-        const TexturePtr & getTexture() const{
+        virtual const TexturePtr & getTexture() const{
             return texture;
         }
 

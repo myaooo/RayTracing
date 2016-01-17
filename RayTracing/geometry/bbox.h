@@ -12,6 +12,7 @@
 #include "Vec3d.h"
 #include "triangle.h"
 #include "../util.h"
+#include <ostream>
 
 namespace MyMath{
     // SuperPlane is a class that define a geometry super plane, or axis aligned plane
@@ -23,15 +24,19 @@ namespace MyMath{
 
         //SuperPlane() : axis(ERROR) {}
         SuperPlane(int a = -1, real_t pos = 0) : axis(static_cast<Axis>(a)), position(pos){}
+        real_t getDistance(const Ray & ray) const{
+            real_t delta = ray.getSource()[static_cast<int>(axis)] - position;
+            return delta * ray.inv_direction[static_cast<int>(axis)];
+        }
     };
 
     // BBox is a class that define a geometry concept box, or bounding box.
     // The box is aligned with the world coordinate
     class BBox : public Intersectable{
-    private:
+    public:
         // hot tmin, tmax
         mutable real_t _hotTMin, _hotTMax;
-    public:
+    
         // data
         Vec3d minVec;
         Vec3d maxVec;
@@ -84,14 +89,15 @@ namespace MyMath{
             }
         }
 
-        void split(BBox & boxA, BBox & boxB, const SuperPlane& pl) const {
+        bool split(BBox & boxA, BBox & boxB, const SuperPlane& pl) const {
             boxA = *this;
             boxB = *this;
-            assert(isBetween(pl.position, minVec[pl.axis] + Epsilon,
-                maxVec[pl.axis] - Epsilon));
+            if (!isBetween(pl.position, minVec[pl.axis] + Epsilon / 2,
+                maxVec[pl.axis] - Epsilon / 2)) return false;
                 // in case there is a too small box or a same box
             boxA.maxVec[pl.axis] = pl.position;
             boxB.minVec[pl.axis] = pl.position;
+            return true;
         }
 
         real_t surfaceArea() {
@@ -162,6 +168,11 @@ namespace MyMath{
             }
         }
 
+        friend std::ostream & operator << (std::ostream  &o, const BBox & b) {
+            o << b.minVec[0] << " " << b.minVec[1] << " " << b.minVec[2] << " ";
+            o << b.maxVec[0] << " " << b.maxVec[1] << " " << b.maxVec[2];
+            return o;
+        }
 
     };
 }

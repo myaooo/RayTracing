@@ -68,8 +68,14 @@ namespace RayTracing {
 
     real_t Renderer::renderAll() {
         Clock c = Clock();
+        cout << " start rendering...\n";
+        int percent = 0;
         for (int i = 0; i < width; i++)
         {
+            if (percent *width < (double)(i) * 20) {
+                percent++;
+                cout <<"rendering..."<< percent * 5 << "%" << endl;
+            }
             for (int j = 0; j < height;j++)
             {
                 Color c = tracer.doTrace((double)(i - centerX) / centerX, (double)(j - centerY) / centerY);

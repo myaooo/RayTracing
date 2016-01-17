@@ -22,6 +22,9 @@
     <Filter Include="Header Files\geometry">
       <UniqueIdentifier>{f13a403c-abde-4c42-9a76-41699f462c11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\meshsimplifier">
+      <UniqueIdentifier>{39fe8859-c9e3-4b41-a416-526f2ae1f19c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RayTracing\color.cpp">
@@ -67,6 +70,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RayTracing\MeshParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracing\scene\rtriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracing\meshsimplifier\meshSimplifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracing\meshsimplifier\vertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracing\meshsimplifier\face.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="RayTracing\scene\rcube.h">
       <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracing\meshsimplifier\meshSimplifier.h">
+      <Filter>Header Files\meshsimplifier</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracing\meshsimplifier\Face.h">
+      <Filter>Header Files\meshsimplifier</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracing\meshsimplifier\Vertex.h">
+      <Filter>Header Files\meshsimplifier</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

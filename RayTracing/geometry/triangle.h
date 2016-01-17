@@ -19,7 +19,9 @@ namespace MyMath {
     public:
         Triangle() {}
         Triangle(const Vec3d& a, const Vec3d& b, const Vec3d& c) :
-            source(a), e1(b - a), e2(c - a), norm(Vec3d::cross(e1,e2)) {}
+            source(a), e1(b - a), e2(c - a), norm(Vec3d::cross(e1,e2)) {
+            norm.normalize();
+        }
 
         Vec3d operator () (int i) const {
             if (!i) return source + e1;

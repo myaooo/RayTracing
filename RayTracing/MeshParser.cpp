@@ -57,7 +57,7 @@ namespace RayTracing {
                         case '\0':			    /* vertex */
                         {
                             Vec3d vP;
-                            if (fscanf(fp, "%f %f %f",
+                            if (fscanf(fp, "%lf %lf %lf",
                                 &vP._p[0],
                                 &vP._p[1],
                                 &vP._p[2]) == 3) {

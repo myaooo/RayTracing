@@ -24,6 +24,9 @@ namespace RayTracing {
         parser.LoadFromObj(*this, fname);
         cout << "verticesNum = " << vertices.size() << ", faceNum = " << faceIdx.size() << endl;
         transform(m,scl);
+        for (auto & t : faceIdx) {
+            t[0]--; t[1]--; t[2]--;
+        }
     }
 
     void Mesh::transform(const Vec3d & offset, real_t scale) {
@@ -38,7 +41,8 @@ namespace RayTracing {
         boundBox.maxVec = offset + (boundBox.maxVec -center) * scale;
     }
 
-    void Mesh::finish() {		// build tree, calculate smooth norm
+    void Mesh::config() {		// build tree, calculate smooth norm
+
         if (smooth) {		// calculate vtx norm
             if (faceIdx.size() < 30) {
                 printf("Number of faces is too small, cannot use smooth!\n");
@@ -47,19 +51,17 @@ namespace RayTracing {
             else {
                 int verticesNum = vertices.size();
 
-                
-
                 NormSum* norm_sum = new NormSum[verticesNum];
+                norms = vector<Vec3d>(verticesNum);
                 for (auto & t : faceIdx) {
                     int a = t[0], b = t[1], c = t[2];
                     Vec3d tmp_norm = Triangle(vertices[a], vertices[b], vertices[c]).norm;
-                    // norms might be in opposite direction ? obj gives vertexes in correct order
                     norm_sum[a].add(tmp_norm);
                     norm_sum[b].add(tmp_norm);
                     norm_sum[c].add(tmp_norm);
                 }
                 for (int k = 0; k < verticesNum; k++)
-                    norms[k] = norm_sum[k].sum / norm_sum[k].cnt;
+                    norms[k] = norm_sum[k].sum / norm_sum[k].count;
                 delete[] norm_sum;
             }
         }
@@ -84,6 +86,13 @@ namespace RayTracing {
             }
         }
         return info;
+    }
+
+    void Mesh::addTriangle(int a, int b, int c) {
+        assert(isValid(std::max(a, std::max(b, c))));
+        RTriangle f(vertices, a, b, c);
+        f.owner = this;
+        faces.push_back(make_shared<RTriangle>(f));
     }
 
 

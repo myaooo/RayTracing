@@ -10,6 +10,7 @@
 
 #include "renderable.h"
 #include "../geometry.h"
+//#include "meshObject.h"
 #include <vector>
 #include <array>
 
@@ -35,35 +36,21 @@ namespace RayTracing {
         RTriangle(const Vec3d& a, const Vec3d& b, const Vec3d& c, const TexturePtr & _texture = nullptr) :
             Renderable(_texture), triangle(a, b, c) {}
 
-        RTriangle(const vector<Vertex> & vertices, int a, int b, int c) {
-            RTriangle(vertices[a], vertices[b], vertices[c]);
-        }
+        RTriangle(const vector<Vertex> & vertices, int a, int b, int c) :
+            triangle(vertices[a], vertices[b], vertices[c]){}
 
 
         // Methods
         // input a ray, and get the intersection info
-        virtual IntersectInfoPtr getIntersect(const Ray & ray) const override {
-            real_t pos;
-            IntersectType intersectType = triangle.intersect(pos, ray);
-            if (intersectType == MISSED) {
-                return nullptr;
-            }
-            IntersectInfo info(make_shared<RTriangle>(*this), ray, pos, triangle.norm, intersectType);
-            if (info.materialPtr == nullptr)
-                std::cerr << "triangle do not have material!" << std::endl;;
-            return make_shared<IntersectInfo>(info);
-        }
+        virtual IntersectInfoPtr getIntersect(const Ray & ray) const override;
+        virtual BBox getBBox() const override;
 
-        virtual BBox getBBox() const override {
-            BBox box;
-            box.unite(triangle.source);
-            box.unite(triangle.source + triangle.e1);
-            box.unite(triangle.source + triangle.e2);
-            // offset to ensure box contains triangle(avoid box split)
-            box.minVec -= Epsilon * 2;
-            box.maxVec += Epsilon * 2;
-            return box;
-        }
+        virtual const TexturePtr & getTexture() const override;
+
+    protected:
+        Vec3d getNorm(real_t u, real_t v) const;
+        Vec3d getNormFromVertex(int i) const;
+        
     };
 
 }
